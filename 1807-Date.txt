@@ -1,0 +1,131 @@
+ The Date & Time APIs
+ ---------------------------------------------------
+  We have java.util.Date and java.util.Calendar class to
+  represent Date & Time along with "Locale" and "TimeZone".
+
+  java.util.Locale class represents country and culture name and
+  java.util.TimeZone represents locale specific timezone. (eg.    Asia/Kolkatta +5:30)
+
+Example: Current system's date & time
+
+ 1. Import the java.util.Date class
+
+import java.util.Date;
+
+class Test {
+   //code in main method:
+
+       .....
+       Date now = new Date();
+       System.out.println( now );
+    ...
+}
+
+Example: Create Date object by passing "milliseconds"
+  
+    Date dt1 = new Date(0); 
+    //Current date & time
+    Date dt2 = new Date( System.currentTimeMillis() ); 
+    System.out.println( dt1 );
+    System.out.println( dt2 );
+
+
+Deprecated Methods of Date class
+============================================================
+ Number of methods in Date are now out of "use" so they are marked as "Depricated". We must not use "depricated" methods.
+
+ More that 80% methods in Date are outdated so we must have to use "java.util.Calendar" instead.
+
+We will use "after", "before", "compareTo", "getTime()" , equals, hashCode, toString methods of Date class.
+
+Example: Obtain millis from Date object.
+
+       Date dt = new Date();
+       long ms = dt.getTime();
+
+       //1000 millis  = 1 second
+
+       //add 1 Hour to current time
+       Date dt1 = new Date( System.currentTimeMillis() + 
+                        60L * 1000L * 60 * 24);
+       System.out.println( dt1 );
+
+        if(dt.before(dt1)) {
+               //
+        }
+        if(dt.after(dt1)) {
+                //
+         }
+
+Format the Date string - Convert Date object into String
+=============================================================
+We will use java.text.SimpleDateFormat class to format the Date & time (format means to convert Date parts into "string" using pre-defined modifiers.)
+
+   Example:
+
+         Date now = new Date();
+         System.out.println( now ); 
+             // will invoke now.toString() and it prints date & 
+             // time as a long date & time style.
+
+          //Now create an object using pattern
+       SimpleDateFormat sdf = new 
+                  SimpleDateFormat("dd-MM-yyyy HH:mm:ss a");
+        String strDate = sdf.format(now);
+        System.out.println(strDate); 
+
+ [Note: See Documentation for "pattern modifiers" ]
+
+Example: Parse the "date string" - To convert "string" date into Date object using "date string pattern".
+
+       String strDate = "31-12-2003"; // UK or Indian
+        String pattern = "MM-dd-yyyy";
+
+        SimpleDateFormat sdf=new SimpleDateFormat(pattern);
+        try {
+           Date date= sdf.parse(strDate);
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+Example: Parse the "2005-10-31 23:22:33"
+Example: Parse the "Jul 30, 2015"
+
+Example: Use "Date" type field to represent birthDate, dateOfAdmit etc 
+
+public class Student {
+   private Integer roll;
+   private String name;
+   private Date birthDate;
+   private Date dateAdmission;
+   ...
+}
+
+Home Work  Try to design "DateHelper" class to reduce the 
+=========   complexity of parse and format and other actions:
+
+ public class DateHelper {
+    public static String toInd(Date dt) {
+        return new SimpleDateFormat("dd-MM-yyyy").format(dt);
+    }
+    public static String toISO(Date dt) {
+        return new SimpleDateFormat("yyyy-MM-dd").format(dt);
+    }
+    public static Date toDate(String strDate,String pattern){
+         try{
+             return new SimpleDateFormat(pattern)
+                                 .parse(strDate);
+         }catch(Exception ex){
+             return null;
+         }
+    }
+
+ Code in main:
+        Date dt = new Date();
+        System.out.println( toInd(dt));
+        System.out.println( toISO(dt));
+        Date dt = toDate("111","yyyy-dd-MM");
+        System.out.println(dt);
+    }
+}

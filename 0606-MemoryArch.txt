@@ -1,0 +1,118 @@
+ Types and memory architecture
+ --------------------------------------------
+
+ Java's types system is designed as per memory architecture of JVM.  The memory managers (which are service program of JVM) will allocate   and deallocate memory implicitly (automatically) or explicitly  (manually).
+
+ When we launch/run a Java program, the memory manager allocates 1 MB  RAM for local variables, method calls, method parameters and return 
+ data. This 1 MB memory is called "Stack Frame Memory".  
+
+ When your program needs more memory other than 1 MB then you must  have to tell the memory manager of JVM for more memory (using "new"  keyword) and this much of memory is called "Heap Frame Memory".
+
+ The size of heap frame memory can be vary from 1 byte to 4 GB where as size of stack frame memory is 1 MB fixed.
+
+ Java's primitive types can use stack as well as heap frame memory. If they are used as local vars, method parameters or return type then they will use "Stack" memory. If primitives are used with "Reference Types" then they will use "Heap" memory.
+
+ Java's reference types always uses "Heap" memory. Heap is generally known as an "Object". An object means a collection of "bytes" through which we can store or retrieve data into or from the memory.
+
+ What is class?
+ -------------- 
+ A class is the blue-print or structure of an object. A class definition contains fields (data members), methods (functions) and
+nested types (class inside another class).
+
+For example, to represent 31-12-2002 data we need to construct the "Date" class.
+
+ class Date {
+    private int day, month, year;
+ }
+
+ Date d; // d is a reference (pointer) variable 
+ d = new Date(); // Memory manager will allocate memory for the
+                 // members of Date type and returns memory address
+                 // of Date object ( 12 bytes) to the "d" reference 		         //  variable.
+
+ Reference variable
+ ----------------------------------------
+ A reference variable is a very special variable which contains memory  address (reference) of an object or null.
+ The special value "null" indicates an absense of an object or object   is missing.
+ 
+ The size of reference variable is 4 bytes.
+
+ Example:
+    String name = null;     //name points to nothing (or no object)
+    name = "Raj";           //name contains memory reference of an
+			    // object (6 bytes) where "Raj" is stored
+    NOTE: String class in Java don't need to be instantiate using 	"new" keyword. The Java compiler automatically adds name = new  String("Raj").
+
+  Date a,b,c;  // Three ref vars and each is 4 bytes = total 12 bytes
+ 
+  a = new Date();  // 12 bytes
+  b = new Date();  // 12 bytes
+  c= new Date();   // 12 bytes
+         Total memory = 12 (ref vars) + 36 (objects) = 48 bytes
+
+  Java's Reference or Core library
+  --------------------------------------------------------------
+  Java's Core APIs designed using unified programming model and   standard conventions.
+
+  The core APIs is collection of class, interface, enum and annotation and these types are organized or arranged using "package" system.
+
+  What is package?
+  ----------------
+   
+  A package is a mechanism to:
+    1. Organize or arrange the TYPES
+    2. To keep one group of TYPES distinct from another group of TYPES
+       to avoid name collition/conflict.
+    3. To add "TYPE abstraction" - to hide sensitive types from the 	users.
+
+  Package conventions
+  ------------------- 
+   Java's Core APIs package uses minimum two level of package name.
+        e.g    java.io
+               java.lang
+               java.net
+           The "java" package name is reserved and we will not use it.
+             
+       Java API's uses javax.net, javax.xml - javax is also reserved.
+ 
+       Third party or custom package name cannot begins with "java" or        "javax".
+
+      e.g   org.apache, com.adatapost, in.tushar etc are example of
+	    third party APIs.
+    
+  Package name must be in lower-case letter and it reflect the   directory structure.
+   e.g
+          in.tushar.model  package name means following directories:
+         
+           /in
+              |----/tushar
+                        |
+                        |----/model
+                                   Student.class
+
+Example:
+package in.tushar.model;
+public class Student {
+}
+
+So, the name of our "Student" class is - in.tushar.model.Student and it is also known as fully qualified class name. The "Student.class" file must be located under /in/tushar/model folder.      
+       
+
+  The java.lang - this package and its types are automatically   available to any kind of program (Java, Android, Web etc) because   the Java compiler automatically import its types.
+
+ The ultimate super class - java.lang.Object
+ -------------------------------------------------------------------
+ 
+  All TYPES including Java API, Android API, Java EE/ME API and custom   classes (user-defined) are automatically inherits the  "java.lang.Object" class. That means the "Object" class is the super   class of all TYPES.
+
+   e.g class A {} 
+    is equivalent to 
+       class A extends Object {}
+    but we don't need to extends manually, the Java compiler     automatically select "java.lang.Object" as a super class.
+
+
+  
+
+
+  
+ 

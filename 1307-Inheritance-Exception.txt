@@ -1,0 +1,194 @@
+ Constructors in super & sub classes
+ =============================================================
+ What is default constructor in Java?
+    When we create a class without any constructor definition
+    inside the class then Java compiler insert an empty     parameter less constructor at the time of compilation     automatically and this type of constructor is called    "default" or "system generated" constructor.
+
+   e.g  class A { } 
+        The Java compiler will add  "public A(){}" into the         class A.
+          So the definition of type "A" will be :
+               class A {
+                   public A() {}
+                }
+   If we create/define a constructor into the class then the    Java compiler will not adds "default" constructor.
+
+   What is the use of "parameterless" or "default" constructor    in inheritance heirarchy?
+       The parameterless or default constructor of super class is automatically selected by the constructors of sub-classes.
+
+Example: When we create an object of sub-classes, the parameterless constructor of super class is selected automatically.
+          
+ class A {
+    public A() {
+      System.out.println("A");
+    }
+    public A(int n) {
+      System.out.println("A with int");
+    }
+ }
+ class B extends A {
+    public B() {
+      System.out.println("B");
+    }
+    public B(int n) {
+      System.out.println("B with int");
+    }
+    public B(String n) {
+      System.out.println("B with string");
+    }
+ }
+  
+Code in main method:
+  B x = new B();     
+  B y = new B(10);
+  B z = new B("Hello");
+
+Output:
+ A
+ B
+ A 
+ B with int
+ A
+ B with string
+
+But what will happen when the class A has "parameterized" constructor only?
+  In this case, the compiler wont compiles the code because
+  there isn't parameterless constructor in super class.
+
+   To deal with this issue/problem, we have "super" keyword.
+
+The super keyword
+------------------
+  The "super" keyword allow us :
+     1. To select super class constructor from within the
+         sub-class constructors.
+        It is important to note here that the "super()"         statement must appear at the beginning of sub-class
+        constructor's body.
+     
+         e.g     public B() {
+                   super(0);  //valid
+                   //other statements
+                 }
+           But following is invalid
+                 public B() {
+                      ...other statements
+                      super(0);
+                  }
+     2. To qualify the super class's field and methods.
+             e.g super.speak(); //method of super class
+                 this.speak(); //method of current class if
+				//it is exists
+Example: Create AgeException and NameException classes with appropriate constructors.
+
+Raise/throw appropriate exception when age or name field value is changed in "Emp" class. (Invalid value)
+
+
+public class AgeException extends Exception {
+   public AgeException(){
+      super("Age Exception");
+   }
+   public AgeException(String msg) {
+      super(msg);
+   }
+}
+
+public class NameException extends Exception {
+   public NameException(){
+      super("Age Exception");
+   }
+   public NameException(String msg) {
+      super(msg);
+   }
+}
+
+public class Emp {
+   private int age;
+   private String name;
+
+
+    public void setName(String name) throws NameException {
+
+        if(name == null || name.length()==0) {
+               throw new NameException("Name cannot be blank or null");
+        }
+
+        this.name = name;
+    }
+
+   public void setAge(int age) throws AgeException {
+    if(age<16) {
+       throw new AgeException("Too minor.");
+     }
+    if(age>70) {
+      throw new AgeException("It's time to retire");
+    }
+   }
+
+    public Emp(int age,String name) throws AgeException, NameException {
+
+        setAge(age);
+        setName(name);
+    }
+}
+
+Example: Study following inheritance hierarchy:
+
+Identify & add constructors in sub & super class to execute following statements:
+
+     Student std = new Student("Manish",10,"5th");
+     Emp emp =new Emp("Mohan",34,"Manager");
+   
+public class Person {
+   private int age;
+   private String name;
+
+   public Person(int age, String name) {
+     this.age = age;
+     this.name = name;
+   }
+}
+public class Student extends Person {
+   private String className;
+
+   public Student(String name,int age,String className) {
+       super(age,name);
+       this.className = className;
+   }
+}
+public class Emp extends Person {
+    private String designation;
+
+    public Emp(String name, int age, String designation){
+       super(age,name);
+       this.designation = designation;
+    }
+}
+
+
+class Stack<T> {
+   private T items[];
+   int top;
+
+   public Stack(T items[]) {
+      this.items = items;
+      top=-1;
+   }
+   public void push(T item) {
+      top++;
+      items[top]=item;
+   }
+   public T pop(){
+     
+     return items[top--];
+   }
+}
+
+code in main:
+
+  Stack<Integer> s1 = new Stack<Integer>(new Integer[4]);
+  s1.push(10);
+  s1.push(20);
+  s1.push(30);
+  System.out.println(s1.pop());
+  System.out.println(s1.pop());
+  System.out.println(s1.pop());
+  System.out.println(s1.pop());

@@ -1,0 +1,227 @@
+ Inheritance 
+ ============================================
+ 
+ What do you meant by the term "Inheritance"?
+
+   We have to use "class" keyword to create a new datatype - either
+   the creating a new datatype from the begining or create a new
+   datatype using existing class (datatype).
+
+   The "Inheritance" is technique to create a new class from using
+   existing class where existing class is known as "Super class" and
+   newly defined class is known as "Sub class".
+
+   General Syntax:
+
+access-modifier class ClassName extends SuperClassName 
+                                implements interface1,interface2,... {
+
+  //fields
+  //constructors 
+  //getters / setters and 
+  //other methods and
+  //nested classes/types
+}
+
+For example,
+
+class Language {  // It is an abstract idea about "Language"
+}
+class Gujarati extends Language {
+}
+class Hindi extends Language {
+}
+class English extends Language {
+}
+class Kathiawadi extends Gujarati {
+}
+
+ There is "is" relationship exists between two classes and it is the  "Inheritance relationship".  
+
+  In Java, each class must have one and only one direct or immediate
+  super class.
+
+   In case if class is created without "extends" clause then Java    compiler inserts "extends java.lang.Object" implicitly.
+
+   So,  class Language {} is same as
+        class Language extends java.lang.Object {}
+
+   In other words, every Java class is directly or indirectly a sub-   class of java.lang.Object and that's why "java.lang.Object" class
+   is known as "Root" or the "Ultimate" super class.
+
+   
+Understand the object and sub-objects
+-----------------------------------------------------------------
+class A {
+   public int no;
+}
+class B extends A {
+    public int no;
+}
+class Test {
+  public static void main(String []args) {
+     B x = new B(); // Three objects will be created in following 		    // order:
+                    // 1. Object of java.lang.Object
+                    // 2. Object of A
+                    // 3. Object of B
+
+    // Implicit Cast - Automatic selection from child to parent
+    A y = x;      // Select parent "A"
+    Object z = x; // Select parent of parent "Object" 
+
+    x.no = 10;
+    y.no = 20;
+
+    System.out.println(x.no + " " + y.no);
+
+    //Explict cast - select child from parent
+   // String s = (String)  z; - Cast exception
+    B p = (B) z;
+    A q = (A) z;
+
+    System.out.println( p.no + " " + q.no);
+
+    System.out.println(   ((B)z).no );
+    System.out.println(   ((A)z).no );
+  }
+}
+
+Implicit cast
+-------------
+In "object-subobjects" hierarchy, selecting a parent from the child reference is called automatic or implicit cast.
+
+Explicit cast
+-------------
+Selecting a child reference from parent reference via (cast) operator.
+
+   Object p = new B(); // Implicit
+   A a = new B();      // Implicit
+   B b = new B();      // Implicit
+   
+   A x = p; // Invalid - Explicit cast required
+   A x = (A) p; // Valid cast
+   String s = (String) p; // Invalid cast
+   Object k = "Hello";   //Implicit
+   String p1 = (String) k; // Valid explict cast
+
+The "instanceof" keyword
+-------------------------
+To determine the type of an object.
+ 
+   refVar instanceof  TypeName  
+
+ The instanceof expression returns boolean value.
+
+Example:
+class Test {
+  public static void main(String []args) {
+     Object x = 10.10; // new java.util.Date(); //"Hello"; //new B();
+     if(x instanceof B) {
+        System.out.println("Yes. It is from B");
+     } else {
+        System.out.println("No. Dont know. : " 
+                    + x.getClass().getName());
+      }
+  }
+}
+
+Understanding the "Method Overriden"
+------------------------------------------------------
+
+To override a method means to create a method name in sub-class whose signature matches its super class's non final method.
+
+Note: We cannot override the final method. A method created with "final" modifier cann be overriden.
+
+Why we override super's methods?
+
+  In general, some of the super class methods are unwanted or they   don't serve the purpose in sub-classes so via "overriding" technique   we can replace super class method definition (memory reference of   method) with  sub-class method (memory reference).
+
+class Language {
+   public void speak() {
+    System.out.println("I can speak ?");
+   }
+}
+class Gujarati extends Language {
+   //Override - sub-class method must have same signature (access       //modifier, method name, parameters and return type) as super's
+   //method singature.
+   public void speak() {
+     System.out.println("I can speak Gujarati.");
+   }
+}
+class English extends Language {
+  public void speak() {
+     System.out.println("I can speak English.");
+   }
+}
+class Test {
+  public static void main(String []args) {
+     Gujarati g = new Gujrati();
+     English e = new English();
+     g.speak();
+     e.speak();
+
+     //Or use Casting to call apropriate method of children
+     Language l;
+     l=e;
+     l.speak();
+     l=g;
+     l.speak();
+  }
+}
+
+When we create an object, a virtual method map will be created if English and Gujarati classes don't have "speak()" version:
+
+  Gujarati g = new Gujrati();
+  ------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | Language.speak()|
+  |----------------------------|
+
+  English e = new English();
+  ------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | Language.speak()|
+  |----------------------------|
+  
+After overrding the speak() method in both classes:
+
+Gujarati g = new Gujrati();
+  ------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | Gujarati.speak()|
+  |----------------------------|
+
+  English e = new English();
+  ------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | English.speak() |
+  |----------------------------|
+
+Language l;
+
+  |------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | null            |
+  |----------------------------|
+
+  l = e;
+
+  |------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | English.speak() |
+  |----------------------------|
+  l.speak();
+
+  l = g;
+  l.speak();
+  |------------------------------
+  | Method   | Ref             |
+  |----------------------------|
+  | speak    | Gujarati.speak() |
+  |----------------------------|

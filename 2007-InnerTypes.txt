@@ -1,0 +1,103 @@
+ Inner Types
+ ===========================================================
+ A type defined inside another type without adding "static"
+ modifier is called "Inner" type and which is a member of
+ enclosing type.
+
+ General Syntax:
+
+ access-modifier EnclosingType {
+    
+    access-modifier EnclosedType {
+    }
+}
+Example:
+
+public class Graph {   <--- Outer
+   .....
+   public class Node {}  <--- Inner. This class is a member of
+   ...                                "Graph" class.
+} 
+
+To create an object of "Node" class, we must have to instantiate the "Graph" class:
+
+        Graph  graph = new Graph();
+
+And to create  an object of "Node" type of "graph" object:
+
+        (Syntax:   
+     Enclosing.Enclosed  varName = encloseRefVar.new Enclosed();
+        )
+
+       Graph.Node nd = graph.new Node();
+
+
+Important:  Inner type is a member of "Outer or Enclosing" hence the Inner type can have access of all members of "Outer" type including private,public,protected and package-level.
+
+Example:
+package in.abc;
+
+public class College {
+    private String courseName;
+    private int count;
+
+    public College(String courseName) {
+        this.courseName = courseName;
+    }
+    public int getCount() {
+        return count;
+    }
+    public String getCollegeName() {
+        return courseName;
+    }
+    public void setCollegeName(String collegeName) {
+        this.courseName = collegeName;
+    }
+ //Inner Type  begins
+    public class Student{
+        private int roll;
+        private String name;
+        public Student(int roll, String name) {
+            this.roll = roll;
+            this.name = name;
+            count++;          //Outer's member
+        }
+        public int getRoll() {
+            return roll;
+        }
+        public void setRoll(int roll) {
+            this.roll = roll;
+        }
+        public String getName() {
+            return name;
+        }
+        public void setName(String name) {
+            this.name = name;
+        }
+        public String getBranchName() { return courseName; }
+        @Override
+        public String toString() {
+            return roll + " " + name + " " + courseName;
+        }
+    }
+ //Inner ends 
+
+}
+
+Code in main:
+
+       College ec=new College("EC");
+       College it=new College("IT");
+
+        System.out.println(ec.getCount() + " " + it.getCount());
+
+        College.Student s1 = it.new Student(10,"A");
+        College.Student s2 = ec.new Student(10,"T");
+        College.Student s3 = ec.new Student(20,"R");
+        System.out.println(ec.getCount() + " " + it.getCount());
+        System.out.println(s1);
+        System.out.println(s2);
+        System.out.println(s3);
+        System.out.println(s3.getRoll() + " " + s3.getName() + " " + s3.getBranchName());
+
+

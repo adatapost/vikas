@@ -1,0 +1,442 @@
+ Java Language Basics
+ ----------------------------------------------------------------------------
+ 
+ Java code , compilation and launcher
+ -------------------------------------
+ First of all create a new folder to save your code work. (e.g c:\Tushar) [ Open command prompt or  explorer]
+
+ Secondly, open the command prompt and set your working directory:
+
+ c:\Tushar>
+
+ And now, use notepad tool to create .java file.
+
+ c:\Tushar>notepad Sample.java  + Press Enter
+
+ 
+ Write following code in Sample.java:
+
+ package in.tushar;
+
+ class Hello {}
+ class Test {}
+ interface Best {}
+
+ Now, to compile the "Sample.java" file:
+
+ C:\Tushar>javac  Sample.java  -d  .
+
+    -d will creates package directories and 
+    .  (dot) indicates the current directory where package directories will be created.
+
+    Above code will creates in/tushar folders and create three .class files in it.
+ C:\Tushar>dir
+            in/tushar
+                     Hello.class
+                     Test.class
+                     Best.class
+
+ Note: Java compiler create separate .class file for each data-type (class, interface, enum or         annotation).
+
+ To run or launch .class files, we will use "java" tool.
+
+ C:\Tushar>java in.tushar.Hello     <----- We must have to use full name of class
+
+       Command will throws an error - in.tushar.Hello class does not contains "main" method.
+      
+  The Java launcher launch or run those classes have a "main" method using one or the following syntax:
+
+       1. public static void main(String []args)  OR
+       2. public static void main(String args[])
+
+Now, change the code in Sample.java file:
+
+
+package in.tushar;
+
+class Hello {
+  public static void main(String []args) {
+     System.out.println("Hi from Hello class");
+  }
+}
+class Test {
+  public static void main(String []args) {
+     System.out.println("Hi from Test class");
+  }
+}
+
+>javac Sample.java -d .
+>java in.tushar.Hello
+>java in.tushar.Test
+
+Example:
+>notepad First.java
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+    System.out.print("A");
+    System.out.print("B");
+    System.out.print("\nHello\n\n");
+    System.out.println("Will adds newline.");
+    System.out.println("\n\nThis is my\nFirst\nProgram.");
+  }
+}
+
+>javac First.java -d .
+>java com.vikas.First
+
+Escape Sequence Or Backslash Characters - \n \t \r \b \a etc.
+------------------------------------------------------------------------------
+Escape sequence represents command/instructions.
+
+\n - new line - To create new line
+\r - Cariage return - Press enter key programatically.
+\t - Tab - Press tab key programatically.
+\b - Backspace - Press backspace
+\\ - To remove effect of escape character
+\" - To represent double quote
+
+Example-2 
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+     System.out.println("Hello\b\b\bI");  //Cursor will be move one position backword
+     System.out.println("Hello\rBO");     //Cursor will be set at the begin of text
+  }
+}
+
+Example - 3 Tab \t leave 8 spaces
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+     System.out.println("No\tName\t\tAge");
+     System.out.println("1\tVikas\t\t22");
+  }
+}
+
+Example - 4 Remove the effect of escape chars using \\
+
+package com.vikas;
+
+class First {
+  public static void main(String []ppp) {
+    System.out.println("My work is saved into c:\\new folder\\test\\bin folder");
+  }
+}
+
+Example - 5 Add double quote into the string.
+
+package com.vikas;
+
+class First {
+  public static void main(String []ppp) {
+    System.out.println("I live in \"Mehsana\"");
+  }
+}
+
+Variables & values
+----------------------------------------------------------------------------------------
+Java language is case-sensitive and tighly type checked (or statically type checked) language. A variable must contains the appropriate value.
+
+Local variables
+---------------
+Variables created inside the method (function) are called local or automatic variables and they don't have default value so we must have to assign some value before their use.
+
+Example:
+package com.vikas;
+class Test {
+   public static void main(String []args) {
+     int no;
+     System.out.println(no);
+    }
+}
+
+ Above code will not be compiled because "no" variable is not initialized.
+
+To remove error, change following code:
+
+     int no = 10;
+     System.out.println(no);
+
+
+Literals or constants
+----------------------
+Following literals used to initialize the primitives and strings.
+
+1. Integer literal is expressed via:
+
+         1. Number without decimal point eg. 10
+         2. Using hexadecimal e.g  0xFF
+         3. Using octal       e.g  012
+         4. Using binary     e.g   0B1010
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+    int v1 = 10;    //decimal
+    int v2 = 0xA;   //hexadecimal starts with 0x
+    int v3 = 012;   //octal starts with 0
+    int v4 = 0B1010;//binary starts with 0B
+ 
+    System.out.println(v1);
+    System.out.println(v2);
+    System.out.println(v3);
+    System.out.println(v4);
+  }
+}
+
+ Java compiler treats number without decimal as "int" datatype.
+
+2. Long Literal - Add "L" or "l" suffix to integer literal.
+
+   e.g   10L
+         0xFL
+         012L
+         0B1010L
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+    long v1 = 100000L * 100000L;
+
+    /* Check the range of value using wrapper class */
+    System.out.println(Integer.MIN_VALUE);
+    System.out.println(Integer.MAX_VALUE);
+
+    System.out.println(Long.MIN_VALUE);
+    System.out.println(Long.MAX_VALUE);
+
+    System.out.println(v1);
+  }
+}
+
+3. float literal - Use "F" or "f" suffix
+4. double literal - Default type of number with decimal is double.
+
+Example:
+
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+     float no = 10.10F;
+     double no1 = 10.10; //double
+     System.out.println(no);
+     System.out.println(no1);
+  }
+}
+
+5. Character literal - Enclose char with single quote:
+
+     'a'
+     '?'
+     '\u0000'  - Unicode literal where \u+four-digit-hex number 		 required.
+    [Note: Use "charmap.exe" windows tool and Arial Unicode font to
+           learn unicode value of a character]
+
+Code in main method:
+
+      char ch  = 'A';
+      System.out.println(ch);
+      ch = '\u0aae';  //Gujarti M
+      System.out.println(ch);
+
+6. String literal - Characters enclosed with double quotes.
+
+   String literal is an object of "java.lang.String" class
+
+   String literal uses + operator to concat (join) two strings. Note that the + operator must appear at the begin of new line if string
+content if divided into multiple lines.
+
+Example:
+package com.vikas;
+
+class First {
+  public static void main(String []args) {
+     System.out.println("Hello");
+     System.out.println("Hello".length());
+     String name = "Raj";
+     String multiline = "Hello\n"
+                      + "How are you? I am fine here\n"
+                      + "and I hope you will be fine there.\n\n"
+                      + "\nRegards\n\nRakesh";
+     System.out.println(name);
+     System.out.println(multiline);
+  }
+}
+
+Any type of value if concat with string then this value will be converted to string automatically.
+
+e.g
+
+   int no1 = 10, 
+       no2 = 20;
+
+    System.out.println("Sum : " + no1 + no2 );  Sum: 1020
+    System.out.println("Sum : " + (no1 + no2) ); Sum: 30
+
+7. Boolean literal - Special value true or false
+
+    e.g
+        boolean isFailed = false;
+
+        if( isFailed ) {
+             System.out.println("Student failed");
+        } else {
+             System.out.println("Student passed"); 
+        }
+
+    Relational expression < > >= <= == != always returns boolean - 					  true or false.
+    Logical/boolean expression &&  &  ||  |  ! always returns boolean.
+
+ e.g
+       System.out.println(10>2);  //true
+       System.out.println(10==9); //false
+
+8. null - The null literal always used with reference types - class,
+           interface, enum and annotation.
+
+         - It indicates that the object is missing.
+
+    e.g String line = null;
+
+Input value from keyboard
+-------------------------------------------------------------------
+We will use java.util.Scanner class and its methods to read value from keyboard.
+
+Example:
+package com.vikas;
+import java.util.Scanner;
+class First {
+   public static void main(String []args) {
+       Scanner scan = new Scanner( System.in );
+        int no;
+        float amount;
+        String name;
+        System.out.print("Enter name : ");
+        name = scan.next();
+        System.out.print("ID : ");
+        no = scan.nextInt();
+        System.out.print("Salary : ");
+        amount = scan.nextFloat();
+        
+        System.out.println("\nNo : " + no + "\nName : " + name + "\nSalary : " + amount);
+     }
+}
+
+If we do not import "Scanner" class then use full class name - java.util.Scanner.
+
+package com.vikas;
+class First {
+  public static void main(String []args) {
+    java.util.Scanner scan = new java.util.Scanner( System.in );
+    ......
+    ......
+  }
+}
+
+Example: Input three numbers and find out which one is the largest.
+Example: Input marks of five subjects. If student fails in three or more subjects (less than 35) then display "Fail". If student fails in one or two subjects then dispplay "ATKT" and if student get marks above or equals to 35 in all subjects then display "Pass".
+
+   13
+   90
+   23
+   77
+   84
+
+ int count = 0;
+
+ if( m1<35 ) {
+    count++; 
+ }
+ if( m2<35 ) {
+    count++;
+ }
+ ....
+ ....
+ ....
+ if(count == 0 ) { /* pass */ } else 
+
+Example: Input electicity units consumbed by the customer and calculate bill amount as per following table:
+
+  Unit		Charges
+ --------------------------
+ First 100 	Rs. 2.5 / unit
+ units
+
+ Next 100	Rs. 3.5 / unit
+ Units
+
+ Next 150	Rs. 4.5 / unit
+ Units
+
+ Next units	Rs. 6.0 / unit
+
+120 Units =  100 * 2.5 + (120 - 100) * 3.5
+
+Example: Input day,month and year and write code to validate it.
+ e.g
+      day  month    year
+      31   4         2013   - invalid
+      29   2         2013   - invalid
+      31   13        2013   - invalid
+      28   2         2013   = valid
+
+Strings in Java
+==============================================================
+Java platform offers two types of strings via :
+ 1. java.lang.String and
+ 2. java.lang.StringBuilder or java.lang.StringBuffer classes
+
+1. java.lang.String - It is a immutable (readonly) object. You cannot change the content of "String" object once it is created and that's why it is called "Immutable" object.
+
+ In "String" object, changes we want to perform will be not update the
+ current object instead JVM creates new object for these changes.
+
+String name = "Raj";    //JVM creates 1st object and returns reference
+name = name + "Kumar"; //JVM creates new (2nd) object and returns ref.
+name = name + " Shah"; //JVM create new (3rd) obj and returns ref.
+
+So never use "String" object where we want to update, delete, add the string content. Always use "StringBuilder" class if you want to update, delete, add string data.
+
+2. java.lang.StringBuilder - It is "mutable" (read & write) object. Any changes in this object will increse or decrease the size of object.
+  e.g
+      StringBuilder sb = new StringBuilder(); //Single object
+      sb.append("Raj");
+      sb.append("Kumar");
+      sb.append("Shah");
+
+Example: Time analysis - How much time is to be taken by String and StringBuilder to concat strings?
+
+package com.vikas;
+
+class First {
+   public static void main(String []args) {
+        String str = "";
+        long start = System.currentTimeMillis();
+        for(int i=1;i<=100000;i++) {
+           str = str + "Raj";
+        }
+        long end = System.currentTimeMillis();
+        System.out.println( (end-start) + " ms.");        
+     }
+  public static void main1(String []args) {
+        StringBuilder str = new StringBuilder();
+        long start = System.currentTimeMillis();
+        for(int i=1;i<=1000000;i++) {
+           str.append("Raj");
+        }
+        long end = System.currentTimeMillis();
+        System.out.println( (end-start) + " ms.");        
+     }
+}
+
+

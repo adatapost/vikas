@@ -1,0 +1,161 @@
+ Arrays
+ -----------------------------------------------
+ Arrays in java are object of java.lang.Object class.
+
+ Array declaration - To create array variable
+ -----------------------------------
+  datatype[]  var1;
+  datatype var2[];
+
+   [] subscript before the variable name will apply to all variables 		after that.
+	int[] no1,no2,no3;  // all three are arrays
+
+   [] subscript after the variable means that particular var is array. 	Not all variables are array.
+ 
+        int no1[], no2, no3;  // "no1" is array but "no2" and "no3" 
+			      // are normal variables
+
+ Array creation - allocate memory for elements
+ ---------------------------------------------
+ Two ways to create arrays:
+
+   1. using new operator
+
+          datatype []var = new datatype[5];
+          datatype var[]= new datatype[5];
+ 
+   2. using array initializer
+
+          datatype []var = { value1, value2,..... };
+          datatype var[]= { value1,..... };
+
+ The length property
+ -----------------------
+ Each created array has a "length" property which returns count of  elements.  
+
+Example:
+package in.test;
+public class Test {
+  public static void main(String []args){
+     int[] no1, no2;
+     no1 = new int[10]; //10 integer variables are created and  its (object) reference returned to no1
+
+     no2 = new int[] { 10, 20, 30, 40, 50 };  //Create & Initialize
+
+     System.out.println( no1.length  + " " + no2.length ); // 10 5
+ 
+     //loop
+     for(int i=0; i<no1.length; i++) {
+        System.out.println( no1[i] );
+     }
+     for(int i=0; i<no2.length; i++) {
+        System.out.println( no2[i] );
+     }
+   }//end main
+}//end class
+
+Example: Array initializer
+
+code in main:
+
+  String []words = 
+   {
+     "Zero",
+     "One",
+     "Two",
+     "Three",
+     "Four",
+     "Five",
+     "Six",
+     "Seven",
+     "Eight",
+     "Nine"
+   };
+ int []rolls = {102, 203, 304, 450,232};
+ 
+ System.out.println(words[0] + " " + words[9]); //Zero Nine
+ for(int i=0;i<words.length;i++) {
+    System.out.println(words[i]);
+ }
+ for(int i=0;i<rolls.length;i++){
+   System.out.println(rolls[i]); 
+ }
+
+Example:
+
+   int no = 3422;
+   while( no> 0 ) {
+     System.out.println( words[ no%10 ]);
+     no = no/10;
+   }
+
+class Test {
+  public static void main(String []args) {
+  String []words = 
+   {
+     "Zero",
+     "One",
+     "Two",
+     "Three",
+     "Four",
+     "Five",
+     "Six",
+     "Seven",
+     "Eight",
+     "Nine"
+   };
+
+  int no = 3422;
+  StringBuilder sb = new StringBuilder();
+   while( no> 0 ) {
+     //System.out.println( words[ no%10 ]);
+     sb.insert(0, words[ no%10 ] + " ");
+     no = no/10;
+   }
+   System.out.println( sb);
+  }
+}
+
+Amount in words. Input number and print words.
+e.g
+  123495  
+  
+One lac Twenty Three Thousand Four Hundred Ninty Five
+
+
+ When to use/choose array?
+ ---------------------------
+ Due to array's size which is fixed and we cannot change during program execution (ie. we cannot add new elements, or delete existing).
+
+ So when we have fixed amount of data then we must have to use array. For example, week day name, month name, digits name etc.
+
+ We will learn a dynamic list (linked list) which will be used to store those data whose size is not determined.
+
+Example: Input 10 numbers into an array of int and finally print sum of all elements.
+ e.g 10,20,30...   = 10+20+30..?
+
+
+Example: Find the largest number from an array
+Example: Find the smallest number from an array
+Example: Sort the array elements in ascedening or descending order
+
+
+Array traversal special loop - for each or for in loop
+---------------------------------------------------------
+
+ Syntax:
+
+    for(datatype varName : arrayVar_or_Iterator) {
+       ...
+    }
+   [We will learn more on Iterator later.]
+
+Example:
+   String []days = {"Mon","Tue","Wed"};
+   for(String day: days) {
+      System.out.println( day );
+   }
+   int []nos = { 66,45,2,344};
+   for(int no: nos) {
+       System.out.println(no);
+   }

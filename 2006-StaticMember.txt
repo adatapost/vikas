@@ -1,0 +1,98 @@
+ The static members of class - static keyword
+ ====================================================================
+ The keyword "static" is used to create "global" entity (variable or  function).
+
+ In other words, static means once created and it is shared by one or  more class or program.
+
+ In our class definition, we can have two types of members:
+
+    1. Static members ( Static fields and methods) and
+    2. Non-static or Instance members (fields & methods)
+
+ Instance  or object members are created more than once when we use  "new" keyword.
+ 
+  Non-static members are created once when the class in which they are   defined is used very first time in our program.
+
+  Static variable/field will remains into memory till an application   is running and that's why static fields are created into the "heap".
+
+  Static members of class are accessed using "ClassName.MemberName"   syntax. They cannot be used with reference variable including "this"
+  keyword.
+
+Example:
+
+package in.ts;
+
+class Test {
+     public static int no; //static or global field
+     public int no1; //instance or object field
+}
+
+class TestMain {
+   public static void main(String []args) {
+     //static member/field is created and initialized automatically
+      System.out.println( Test.no ); // prints 0
+      
+      Test.no = 100;
+ 
+      //create instances/objects
+      Test a=new Test(); //allocate memory for "no1" (copy of no1)
+      Test b=new Test(); //allocate memory for "no1"
+      a.no1 = 10;
+      b.no1 = 20;
+      System.out.println(a.no1 + "  "+ b.no1 + " " + Test.no);
+   }
+}
+
+Example: Student having roll & name instance fields and college as static field.
+
+public class Student { 
+  private int roll;
+  private String name;
+  private static String college;
+  private static int totalStudent;
+
+  public Student() { 
+    totalStudent++;
+  }
+  public Student(int roll,String name){
+    totalStudent++;
+    this.roll = roll;
+    this.name=name;
+  }
+  public static void setCollege(String college) {
+       //this.college = college is illegal and will throws error
+       Student.college = college; //Use ClassName.Member
+  }
+ public static String getCollege() { return college; }
+ public int getTotalStudent() { //only getter for count
+    return totalStudent;
+ }
+ //getter & setter for roll & name
+ ...
+
+ public void print() {
+    System.out.println("College : " + college);
+    System.out.println("Roll : " + roll);
+    System.out.println("Name : " + name);
+ }
+}
+
+public class StudentTest {
+  public static void main(String []args) {
+   Student.setCollege( "S.R. Patel Engg College" );
+   System.out.println("Students : " + Student.getTotalStudent()); //0
+   
+   Student s1 = new Student();
+   Student s2=new Student(10,"A");
+   s1.setRoll(4);
+   s1.setName("B");
+   Student s3 = new Student(1,"P");
+   System.out.println("Students : " + Student.getTotalStudent()); //3
+
+  // Student.setCollege("Patan");
+   s1.print();
+   s2.print();
+   s3.print();
+  }
+}
+

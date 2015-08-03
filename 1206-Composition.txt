@@ -1,0 +1,323 @@
+ Composition
+ ----------------------------------------------------
+ It is a technique to use objects of other classes to construct the  complex object.
+
+ In Java/Android development, 90% of classes used as "composition" and  10% of classes are used as "Inheritance" and "Generics".
+
+Address.java
+---------------
+ package in.ts;
+
+ public class Address {
+    private String city;
+    private int pin;
+
+    public Address() {
+       city = "";
+       pin=0; 
+    }
+    public Address(String city,int pin) {
+       this.city = city;
+       this.pin = pin;
+    }
+  //getter & setter
+ }
+
+Student.java
+===============
+package in.ts;
+ public class Student {
+    private int roll;
+    private String name;
+    private Address localAddress;
+    private Address postalAddress;
+
+    //Compulsory constructor to initialize the fields because we 
+    //need to create objects of "Address" class very initially.
+    public Student() {
+       roll = 0;
+       name = ""; //or name = new String();
+       localAddress = new Address();
+       postalAddress = new Address();
+    }
+   //getter & setter
+   public Address getLocalAddress() { return localAddress;}
+   public void setLocalAddress(Address localAddress) {
+      this.localAddress = localAddress;
+   }
+   public void setPostalAddress(Address postalAddress) {
+      this.postalAddress = postalAddress;
+   }
+   public Address getPostalAddress() { return postalAddress;}
+
+   public int getRoll() { return roll;}
+   public String getName() { return name;}
+   public void setRoll(int roll) { this.roll = roll; }
+   public void setName(String name) { this.name = name; }
+ }
+
+StudentTest.java
+-------------------------
+package in.ts;
+
+public class StudentTest{
+  public static void main(String []args) {
+     Student s= new Student();
+     s.setRoll(10);
+     s.setName("Manish");
+     s.getLocalAddress().setCity("Meh");
+     s.getLocalAddress().setPin(384001);
+     s.getPostalAddress().setCity("Pat");
+     s.getPostalAddress().setPin(390001);
+
+     System.out.println(s.getRoll() + " " + s.getName());
+     System.out.println(s.getLocalAddress().getCity()+ " " 
+                 + s.getLocalAddress().getPin());
+     System.out.println(s.getPostalAddress().getCity() + " " 
+                 + s.getPostalAddress().getPin());
+  }
+}
+
+We can use setPostalAddress and setLocalAddress methods to store addresses.
+
+Test - 2 (How to use the Student class?)
+
+ code in main method:
+
+    Student s = new Student();
+    s.setLocalAddress( new Address("Mehsana",384001) );
+    s.setPostalAddress( new Address("Patan",293001) );
+    s.setRoll(10); 
+    s.setName("Raj");
+    System.out.println(s.getRoll() + " " + s.getName());
+    System.out.println(s.getLocalAddress().getCity() + " " + s.getLocalAddress().getPin());
+    System.out.println(s.getPostalAddress().getCity() + " " + s.getPostalAddress().getPin());
+
+
+Test - 3 We can create Address class object separately and pass reference to setLocalAddress and setPostalAddress
+
+code in main:
+
+    Student s = new Student();
+    Address a = new Address("Meh",29);
+    Address b = new Address("Pat",40);
+    s.setLocalAddress( a );
+    s.setPostalAddress( b );
+    .....
+    .....as per previous program
+
+Test - 4 We can use parameterized (argument) constructor of Student class.
+
+Add following code in "Student" class:
+
+  public Student(int roll,String name,Address localAddress,
+                     Address postalAddress) {
+      this.roll= roll;
+      this.name = name;
+      this.localAddress = localAddress;
+      this.postalAddress = postalAddress;
+    }
+
+Add following code in "StudentTest's" main method:
+ 
+    Address a = new Address("Meh",29);
+    Address b = new Address("Pat",40);
+    Student s = new Student(10,"Raj",a,b);
+    Student y = new Student(20,"Man",new Address("Sur",333),
+                                           new Address("Raj",555));
+
+Example: Define Point and Rect classes
+
+public class Point { 
+  private int x,y;
+  public Point() { }
+  public Point(int x,int y) { this.x=x; this.y=y;}
+  public void setX(int x) { this.x=x;}
+  public void setY(int y) { this.y=y;}
+  public int getX() { return x;}
+  public int getY() { return y;}
+  
+}
+public class Rect {
+  private Point location;
+  private Point size;
+  ...
+
+  public void print() {
+    System.out.println(location.getX() + " " + location.getY());
+    System.out.println(size.getX() + " " + size.getY());
+  }
+}
+public class RectTest {
+  public static void main(String []args) {
+    //1. 
+         Rect r1 = new Rect();
+         r1.setLocation( new Point(10,20) );
+         r1.setSize( new Point(200,300) );
+         System.out.println(r1.getLocation().getX() + " " + r1.getLocation().getY() + " " + r1.getSize().getX() + " "+ r1.getSize().getY());
+
+    //2. 
+         Rect r2 = new Rect();
+         r2.getLocation().setX(30);
+         r2.getLocation().setY(40);
+         r2.getSize().setX(400);
+         r2.getSize().setY(500); 
+         ...print
+    //3. 
+         Rect r3 = new Rect( new Point(50,60), new Point(500,600) ); 
+         ....print
+  }//end main
+}//end class
+
+
+
+Example: Linked list of "Student" -- Chain of student objects. An object has memory reference of another object and so on is called "Linked List".
+
+public class Student {
+  private int roll;
+  private Student link;
+
+  public Student() {
+     roll = 0;
+     link = null;
+  }
+  public Student(int roll) {
+     this.roll = roll;
+  }
+  public Student(int roll,Student link) {
+     this.roll = roll;
+     this.link = link;
+  }
+  public int getRoll() { return roll;}
+  public Student getLink() { return link;}
+  public void setRoll(int roll) { this.roll=roll;}
+  public void setLink(Student link) { this.link = link;}
+}
+
+public class StudentLinked {
+  public static void main(String []args) {
+    Student s1 = new Student(10);
+    Student s2 = new Student();
+    s2.setRoll(20);
+    Student s3 = new Student(30);
+
+    //set link property
+    s1.setLink( s2 );
+    s2.setLink( s3 );
+
+    System.out.println(s1.getRoll() + " " 
+        +  s1.getLink().getRoll() + " " 
+        + s1.getLink().getLink().getRoll());
+
+    s3.setLink( new Student(40) );
+
+    Student t = s1;
+    while( t!=null ) {
+         System.out.println(t.getRoll());
+         t = t.getLink();
+    }
+
+    s3.getLink().setLink( new Student(50, new Student(60)) );
+  }
+}
+
+
+Example: Create following classes
+
+public class Dept { 
+   private int id;
+   private String name;
+}
+
+public class Emp {
+   private int id;
+   private String name;
+   priate Dept dept;
+}
+
+Example: Represent geneology ( family-tree )
+
+public class Person {
+   private String name;
+   private int age;
+   private Person father;
+   private Person mother;
+   public Person(){}
+   public Person(String name,int age, Person father, Person mother) {}
+}
+public class Marriage {
+   private Person husband;
+   private Person wife;
+}
+
+Tip:
+
+  Person grandF = new Person("Mohan",80,null,null);     
+  Person grandM = new Person("Radha",77,null,null);
+  Marriage m0 = new Marriage(grandF,grandM);
+
+  //Grands have 3 sons and they are married
+  Person s1 = new Person("Suresh",50,grandF,grandM);
+  Person s11 = new Person("Meena",50,null,null);
+  Marriage m1 = new Marriage(s1,s11);
+
+  Person s2 = new Person("Mahesh",45,grandF,grandM);
+  Person s22 = new Person("Reena",45,null,null);
+  Marriage m2 = new Marriage(s2,s22);
+
+  Person s3 = new Person("Manish",30,grandF,grandM);
+
+  //children of "Suresh" (s1)
+  Person c1 = new Person("Raj",10,s1,s11);
+
+  
+ System.out.println( c1.getName() + " " + c1.getFather().getName() + " " + c1.getFather().getFather().getName());
+
+Example: Input valid date and count number of days since 1 Jan of the same year.
+
+  10-1-2015   =  10 days
+  1-2-2015    = 32 days
+  31-12-2015  = 365 days
+e.g
+
+  20-12-2015
+
+   day   month   year     total       
+   20     12      2015       0          
+          11                 20 + 30  
+          ...
+          1 
+
+ 1. total = day;
+ 2. month--;
+ 3. 
+  while(month>=1) {
+    if(month==11 || month==9 || month ==6 || month == 4) {
+        total = total + 30;
+     }
+    else
+    if(month==1 || month == 3 .....) {
+        total = total + 31;
+    }
+    else
+    if(month==2) {
+      ...
+    }
+    month--;
+   }   
+
+Example: Input valid date and count remaining days in the same year.
+
+ e.g
+
+     10-1-2015 =  355 days
+     30-11-2015 = 32 days
+     20-4-2015 = 30-20= 10 + 31 + 30 + 31 + 31+ 30 +31 + ..  
+   
+
+10-5-2002 to 1-6-2005
+
+2002 - 200 days
+2003 - 365
+2004 - 366
+2005 - 150

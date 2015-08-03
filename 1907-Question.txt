@@ -1,0 +1,193 @@
+package in.abc;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class Question  {
+    private String text,
+                   option1,
+                   option2,
+                   option3;
+    public void display() {}
+    public boolean isCorrect(){ return false;}
+
+    public Question(String text, String option1, String option2, String option3) {
+        this.text = text;
+        this.option1 = option1;
+        this.option2 = option2;
+        this.option3 = option3;
+    }
+
+    public Question() {
+
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getOption1() {
+        return option1;
+    }
+
+    public void setOption1(String option1) {
+        this.option1 = option1;
+    }
+
+    public String getOption2() {
+        return option2;
+    }
+
+    public void setOption2(String option2) {
+        this.option2 = option2;
+    }
+
+    public String getOption3() {
+        return option3;
+    }
+
+    public void setOption3(String option3) {
+        this.option3 = option3;
+    }
+}
+
+
+
+package in.abc;
+
+import java.util.Scanner;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class SingleChoice extends Question {
+    private int correctOption,
+                userOption;
+
+    public SingleChoice(String text, String option1, String option2, String option3, int correctOption) {
+        super(text, option1, option2, option3);
+        this.correctOption = correctOption;
+    }
+
+    public int getCorrectOption() {
+        return correctOption;
+    }
+
+    public void setCorrectOption(int correctOption) {
+        this.correctOption = correctOption;
+    }
+
+    public int getUserOption() {
+        return userOption;
+    }
+
+    public void setUserOption(int userOption) {
+        this.userOption = userOption;
+    }
+
+    @Override
+    public void display() {
+        System.out.println(getText());
+        System.out.println("1. " + getOption1());
+        System.out.println("2. " + getOption2());
+        System.out.println("3. " + getOption3());
+        System.out.println("Enter your selection : ");
+        userOption = new Scanner(System.in).nextInt();
+    }
+
+    @Override
+    public boolean isCorrect() {
+        return userOption == correctOption;
+    }
+}
+
+
+package in.abc;
+
+import java.util.Scanner;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class MultipleChoice extends Question {
+    private int[] userOption,
+                  correctOption;
+
+    public MultipleChoice(String text, String option1, String option2, String option3, int[] correctOption) {
+        super(text, option1, option2, option3);
+        this.correctOption = correctOption;
+        this.userOption = new int[3];
+    }
+
+    public int[] getUserOption() {
+        return userOption;
+    }
+
+    public void setUserOption(int[] userOption) {
+        this.userOption = userOption;
+    }
+
+    public int[] getCorrectOption() {
+        return correctOption;
+    }
+
+    public void setCorrectOption(int[] correctOption) {
+        this.correctOption = correctOption;
+    }
+
+    @Override
+    public void display() {
+        System.out.println(getText());
+        System.out.println("1. " + getOption1());
+        System.out.println("2. " + getOption2());
+        System.out.println("3. " + getOption3());
+        System.out.println("Enter your selection Choose 1 for correct 0 for incorrect option : ");
+        Scanner sc=new Scanner(System.in);
+        userOption[0]=sc.nextInt();
+        userOption[1]=sc.nextInt();
+        userOption[2]=sc.nextInt();
+    }
+
+    @Override
+    public boolean isCorrect() {
+        return userOption[0] == correctOption[0]
+                 && userOption[1] == correctOption[1]
+                      && userOption[2] == correctOption[2];
+    }
+}
+
+
+package in.abc;
+
+public class Main {
+    public static void main(String[] args) {
+       Question questions[]=new Question[5];
+
+        //Five single or multiple choice questions
+
+        questions[0]= new MultipleChoice("Text form multiple1","option1","option2","option3",new int[]{0,0,1});
+        questions[2]= new MultipleChoice("Text form multiple2","option1","option2","option3",new int[]{1,0,1});
+        questions[4]= new MultipleChoice("Text form multiple3","option1","option2","option3",new int[]{1,1,1});
+
+        questions[1]= new SingleChoice("Text form single","option1","option2","option3",1);
+        questions[3]= new SingleChoice("Text form single","option1","option2","option3",2);
+
+        //Start exam
+
+        int c=0;
+        for(Question q: questions) {
+            q.display();
+            if(q.isCorrect()) {
+                System.out.println("Very good. Your are right");
+                c++;
+            } else {
+                System.out.println("Sorry!");
+            }
+        }
+        System.out.println("Total Correct : " + c);
+    }
+}

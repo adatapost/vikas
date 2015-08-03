@@ -1,0 +1,153 @@
+ Initialization 
+ ---------------
+ Initialization means to assign some value to variables before we use  them.
+
+ By default local variables are initialially unassigned and following code throws an error:
+
+ void p1() {
+    int n;
+    System.out.println(n); <-- Error
+ }
+
+ Field - static & instance
+ ----------------------------------------
+ Any field of type  byte, short, int, long, float and double is automatically initialized with 0.
+
+ Any field of type boolean is initialized with false.
+
+ Any field of type char is initialized with '\0' ( character null)
+  
+ Any field of type Class, Interface, Enum or Annotation is initialized  with null.
+
+Example:
+
+ package com.vikas;
+ 
+class Test {
+  public int no;
+  public static int no1;
+  public String name;
+  public static String school;
+  public static boolean status;
+}
+class First {
+    public static void main(String []args) {
+       System.out.println(Test.no1 + " " + Test.school); //0 null
+       Test a = new Test();
+       System.out.println(a.no + " " + a.name + " " + Test.status); //0 null false
+   }     
+}
+
+However you can use "constructors" to initialize the instance fields. And initializer syntax to initialize both instance and static fields.
+
+Example: Initializer syntax
+class Test {
+  public int no = 10;
+  public static int no1 = 20;
+  public String name = ""; //empty
+  public static String school = "ABC School";
+  public static boolean status = true;
+}
+
+Example: Constructor syntax
+class Test {
+  public int no;
+  public static int no1;
+  public String name;
+  public static String school;
+  public static boolean status;
+  public Test() {  /* Only for instance fields */
+     no = 10;
+     name = "Rajesh";
+  }
+}
+
+There are two more techniques in Java to initialize the members or write code which will be executed very early. 
+
+  This technique is called "blocks":
+
+    1. Instance block
+ 
+         Syntax:
+             {
+              //this is instance block
+             }
+
+         Statements inside the instance block are executed each time
+	 when you create an object.
+
+     2. Static block
+
+          Syntax:
+
+             static {
+               //this is static block
+              }
+
+          The static block executed once per program execution especially when the class in which static block is added, is used very first time in your program.
+
+Example:
+
+package com.vikas;
+ 
+class Test {
+ {  //instance block
+    System.out.println("Hello I'm instance block1");
+  }
+   static {  //static block
+      System.out.println("I'm static block1 from Test");
+   }
+
+  public Test() {
+     System.out.println("Constructor");
+  } 
+  static {  //static block
+      System.out.println("I'm static block2 from Test");
+   }
+  {  //instance block
+    System.out.println("Hello I'm instance block2");
+  }
+}
+class First {
+    static {
+        System.out.println("I'm static from First class");
+    }
+    public static void main(String []args) {
+       System.out.println("I'm main function.");
+       Test a = new Test();
+       Test b = new Test();     
+   }     
+}
+
+Home Work Example:
+---------------------
+public class MyNumber {
+   private int no;
+   //constructors, getter/setter
+   //extra methods
+   public boolean isOdd() { ..}
+   public boolean isPrime() { .. }
+   public int reverse() { ... } //eg. 123 => 321
+   public int sumDigits() { ..} // e.g 123 => 1+2+3
+   public String words() { ..} //e.g 123 => One Two Three
+   public boolean isPalindrome() { } //e.g 929, 3223 ,121, 12321
+   public int square() {}
+   public int cube() {}
+}    
+public class MyDate {
+   private int d,m,y;
+   //constructors,getter/setter
+   extra methods
+   public boolean isLeap() {}
+   public boolean isValid() {}
+   public boolean is31() {}
+   public boolean is30() {}
+   public boolean is28() {}
+   public void next() {}
+   public void prev() {}
+   public void addDays(int d) { }
+   public void subDays(int d) {}
+   public int remainingDays() {}
+   public int getDayOfYear() {}
+}
+ 

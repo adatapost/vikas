@@ -1,0 +1,19 @@
+ You can return XML data document based upon the questions data.
+  Add following method in your "TestPaper" class:
+
+   public String getXml(){
+        StringBuilder sb=new StringBuilder();
+        sb.append("<questions>");
+        for(Question q: questions) {
+         sb.append("<que>");
+            sb.append("<text>" + q.getText() + "</text" );
+            sb.append("<opt1>" + q.getOption1() + "</opt1" );
+            sb.append("<opt2>" + q.getOption2() + "</opt2" );
+            sb.append("<op3>" + q.getOption3() + "</op3" );
+          sb.append("</que>");
+        }
+        sb.append("</questions>");
+        return sb.toString();
+    }
+And call this method in your main method code:
+    System.out.println( new TestPaper().getXml() );

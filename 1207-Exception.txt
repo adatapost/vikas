@@ -1,0 +1,149 @@
+ Exception
+ ============================================================
+ 
+ An "Exception" is an unexpected happening in our code that is
+ either disrupt our code or produce incorrect result. If we 
+ cannot understand the cause of such events/exceptions then
+ our program will be halt immediately or produce incorrect 
+ results.
+
+ In other words, an exception is a Java's notification (message)
+ system through which one component pass notification to
+ another component and so on.
+
+ Exception APIs  
+ ================
+
+ In Java platforms (SE,ME,EE,Android), all kind of "exceptions"  are sub-class of java.lang.Throwable class - It is super class
+ of all exceptions. 
+
+ Each exception cause is denoted by the class name whose suffix will be "Exception" or "Error".
+   e.g
+          FileNotFoundException
+          RuntimeException
+          NullPointerException
+          
+  Types/Categories of Exception
+  -------------------------------
+ We have three category of exceptions (or you can say level of  exceptions)
+
+    1. Error      -  These kind of exceptions always stop the
+		     program (Stops JVM) abruptly and we cannot
+		(or program) recover if "Error" exception is
+                     raised.
+
+		  Any class you see with "Error" suffix are
+		  example of "Error" exception.
+
+                   - We cannot use try,catch,throw, throws or
+			finally keywords/blocks with "Error"
+			exceptions.
+   2. Unchecked Exception  or Runtime exception
+                   These kind of exceptions are raised & thrown    by the Java Virtual Machine and mostly they are implemented
+   into the Java's core APIs.
+
+                    Any sub-class of "RuntimeException" is an     example of "Unchecked" exception.
+   3. Checked Exception or Compile & Runtime exception
+
+                   These kind of exceptions are examined during
+       compilation and at the time of execution (by the JVM).
+
+                    All high-level APIs in Java platforms and
+        custom classes uses "checked" exception.
+
+                    Any sub-class of "Exception" and not of the "RuntimeException" is an example of "checked" exception.
+
+        The checked exception must be caught or re-thrown via
+        try..catch or throw & throws keyword respectively.
+
+        To use checked exception, our method must have following         signature:
+
+  access-modifier returntype methodName() throws CheckedEx1,
+                                                 CheckedEx2,...    {         
+    //
+   }
+
+       To produce or raise the "Exception" we will use "throw"
+        keyword:
+
+           throw new ExceptionClass();
+
+Example:
+
+package in.ts;
+
+//Custom exception class
+class DontPassZeroException extends Exception {}
+
+class Test {
+  //Never use RuntimeException
+  static void test(int n) {
+      if(n == 0) {
+         throw new RuntimeException("We cannot accept ZERO.");
+      }
+      System.out.println(n);
+  }
+  //Checked exception
+  static void best(int n) throws Exception {
+      if(n == 0) {
+         throw new Exception("We cannot accept ZERO.");
+      }
+      System.out.println(n);
+  }
+ //Checked exception - Custom exception
+  static void theBest(int n) throws DontPassZeroException {
+      if(n == 0) {
+         throw new DontPassZeroException();
+      }
+      System.out.println(n);
+  }
+  public static void main(String []args)   {
+         try{
+            test(0);
+         }catch(Exception ex) {
+            System.out.println(ex);
+         }
+          try{
+            best(0);
+          }catch(Exception ex){
+             System.out.println(ex);
+          }
+          try{
+            theBest(0);
+          }catch(DontPassZeroException ex){
+             System.out.println(ex);
+          }
+         System.out.println("Done");
+  }
+}
+
+Chain of exceptions
+===========================================================
+Using Exception(String,Throwable) constructor, we can create a new exception which holds message and previously caught exception.
+
+Example:
+
+class Test {
+   static void a() throws Exception {
+      throw new Exception("Cause - 1");
+   }
+   static void b() throws Exception {
+     //catch and re-throw
+      try {
+  a ();
+      }catch(Exception ex) {
+         //Create new object and push message & previous
+         //exception object reference
+        throw new Exception("Cause - 2",ex);
+      }
+   }
+   public static void main(String []args)   {
+        try{
+             b();
+        }catch(Exception ex) {
+           System.out.println(ex); //will call toString()
+           System.out.println(ex.getMessage());
+           ex.printStackTrace();
+        } 
+  }
+}

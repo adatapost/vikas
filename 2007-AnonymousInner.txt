@@ -1,0 +1,71 @@
+ Anonymous Inner class/Type
+ ------------------------------------------------------------
+ 
+ Here is another syntax to create "Inner" types but these types
+ don't have "type name (class name)" and that's why we called it  "Anonymous Inner class".
+
+ You can create anynomous inner class inside the class or method
+ or body of selection or loop construct.
+
+ Following syntax declare nameless (anonymous) class:
+
+     1.  
+
+       InterfaceName  refName = new  InterfaceName() {
+         //implement methods here..
+       };
+
+     2. 
+ 
+       ClassName refName = new ClassName() {
+          //override methods
+       };
+
+ Above syntax is used to create a new class anywhere - inside  the method, class or outside the method.
+
+ Understanding of syntax:
+  new  (class ? implements InterfaceName { 
+          //method
+         }) 
+
+  new  (class ? extends ClassName { 
+          //method
+         }) 
+
+The Java compiler compiles anonymouse classes as ContainingClassName$1.class etc.
+
+e.g   Test$1.class, Test$2.class
+Example:
+package in.ts;
+ 
+class Language {
+   public void speak() {}
+}
+interface Shape {
+  void draw();
+}
+class Test {
+  public static void main(String []args) {
+      //Sub class of "Object"
+      Object myName = new Object() {
+         @Override public String toString() {
+          return "I am Vikas. I live in Surajnagar, Dabhi";
+         }
+      };
+     //Sub class of Language
+     Language iCan = new Language() {
+      @Override public void speak() {
+         System.out.println("I can speak Gujarati, Hindi and English.");
+      }
+     };
+      //Implements Shape interface
+      Shape circle = new Shape() {
+        @Override public void draw() {
+           System.out.println("Circle drawn.");
+         }
+      };
+      System.out.println(myName);
+      iCan.speak();
+      circle.draw();
+  }
+}

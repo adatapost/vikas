@@ -1,0 +1,54 @@
+package in.abc;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class DateHelper  {
+    public static java.util.Date now(){
+        return new java.util.Date();
+    }
+    public static String toStr(Date dt,String pattern){
+        return new SimpleDateFormat(pattern).format(dt);
+    }
+    public  static String toIndDate(Date dt){
+        return toStr(dt,"dd-MM-yyyy");
+    }
+    public  static String toIndDateTime(Date dt){
+        return toStr(dt,"dd-MM-yyyy HH:mm:ss a");
+    }
+    public  static String toTime(Date dt){
+        return toStr(dt,"HH:mm:ss a");
+    }
+    public static Date toDate(String str,String pattern) {
+        try{
+          return  new SimpleDateFormat(pattern).parse(str);
+        }catch(Exception ex){
+            return  null;
+        }
+    }
+}
+
+package in.abc;
+
+import java.util.Date;
+
+public class Main {
+    public static void main(String[] args) {
+        Date dt = DateHelper.now();
+        System.out.println( DateHelper.toIndDate(dt));
+        System.out.println( DateHelper.toIndDateTime(dt));
+        System.out.println( DateHelper.toTime(dt));
+
+        dt = DateHelper.toDate("31-12-2002","dd-MM-yyyy");
+        System.out.println(dt);
+        dt = DateHelper.toDate("31/12/2002","dd/MM/yyyy");
+        System.out.println(dt);
+        dt = DateHelper.toDate("31-Jan-2015","dd-MMM-yyyy");
+        System.out.println(dt);
+    }
+}
+
+

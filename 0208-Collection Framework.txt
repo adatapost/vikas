@@ -1,0 +1,169 @@
+ The Collection Framework (java.util)
+ -------------------------------------------------------------
+ A collection means group of objects or elements. We've used  arrays to create collections but arrays are not suitable when
+ the count of elements are not known at the time of compilation  and they don't have methods to insert or delete elements.
+
+ In Java API - java.util package, we have bunch of TYPES -  interfaces, classes, enums and annotations which define
+ collection behavior.
+
+ In general, the collection must have "Iterator" behavior - Iterator means how to visit/traverse each element of the collection. That means every collection class must implements "java.util.Iterator" interface.
+
+ Further, based upon the usage of "collection" we have three  kind of behaviors:
+      1. List - It is ordered list (linked list) whose size
+		can be grows or shrinks dynamically (when 		elements are added or removed).
+      2. Set - Collection of "unique" (no duplicate) objects.
+      3. Map - Collection of objects where each object is 		accessed via unique "key". Map is also known as
+		"Dictionary" object.
+		Each entry in a Map is pair of Key-Value.
+
+Array is called "Iterator" - Why?
+Because arrays in Java are instance of "Object" and they implicitly implements "java.util.Iterator" interface. The most commonly used iterator loop is for..in... loop:
+
+   for(Type varName: Iterator-Object(Array/Collection) ) {
+      ...
+   }
+
+The Collection classes
+-----------------------
+All TYPES under collection framework are created using "Generics" so these collections can be used with varities of TYPES except the primitives.
+
+1. ArrayList<T> or Vector<T> or Stack<T> or LinkedList<T> etc
+   classes are implementation of List<T> interface.
+
+   So we can use folowing syntax to instantiate them:
+
+     List<String> cities = new ArrayList<String>();
+     ArrayList<String> cities = new ArrayList<String>();
+     List<String> stk = new Stack<String>();
+     Stack<Float> ftk = new Stack<Float>();
+
+  NOTE: The Type parameter value can be empty <> while creating
+	an object.
+	e.g
+	 List<Integer> nos = new ArrayList<>(); // valid
+
+  Note: <> is called diamond operator 
+
+Example: ArrayList<T>
+
+        ArrayList<String> cities = new ArrayList<String>();
+
+        System.out.println(cities.size()); //count - 0
+
+        //append elements
+        cities.add("Surat");
+        cities.add("Patan");
+        cities.add("Meh");
+        cities.add(0,"Jamnagar"); // Insert at
+        System.out.println(cities.size()); //count - 4
+
+        System.out.println( cities.get(0)); // Jamnagar
+        //Update element
+        cities.set(0,"JAMNAGAR"); 
+
+        //Traverse the list
+        for (String city : cities) {
+            System.out.println(city);
+        }
+        //Search an element
+        System.out.println( cities.contains("Meh")); //true
+        System.out.println( cities.indexOf("Surat1")); //-1
+
+        cities.remove(0); //Remove at
+        cities.remove("Meh"); //Remove Element
+
+        System.out.println("After removing");
+        //Traverse the list
+        for (String city : cities) {
+            System.out.println(city);
+        }
+Example: Create student collection.
+
+Method-1
+--------
+1. Assume that we have "Student" class with roll & name fields
+public class Student { ... }
+2. Code in main:
+
+   List<Student> students = new ArrayList<Student>();
+   students.add( new Student(1,"R") );
+   students.add( new Student(2,"A") );
+   students.add( new Student(3,"U") );
+   for( Student std : students ) {
+     System.out.println( std.getRoll() + " " + std.getName() );
+   }
+Method-2  Extending the ArrayList<T> class
+----------
+1. Assume that we have "Student" class
+public class Student { ... }
+2. Create "Students" sub class of ArrayList<Student>
+public class Students extends ArrayList<Student> { }
+3. Code in main:
+
+   Students std = new Students();
+   students.add( new Student(1,"R") );
+   students.add( new Student(2,"A") );
+   students.add( new Student(3,"U") );
+   for( Student std : students ) {
+     System.out.println( std.getRoll() + " " + std.getName() );
+   }
+
+Example: Extends the ArrayList<Student> -- Add more methods in it.
+
+public class Student { ... }
+public class Students extends ArrayList<Student> {
+
+   //extra methods
+   public void add( int roll, String name ) {
+       add( new Student(roll, name) ); //call the super's method
+   }
+
+   public void printAtConsole() {
+      for( Student s: this ) {
+        System.out.println( s.getRoll() + " " + s.getName() );
+      }
+   }
+}
+code in main:
+    Students std = new Students();
+    //std.add(10,"Rajesh");
+    std.add( new Student(4,"Manish") );
+    std.printAtConsole(); 
+    for( Student s: std ) {
+        System.out.println( s.getRoll() + " " + s.getName() );
+      }
+
+
+Homework :
+
+  1. Define the collection of "Question" class (Either extending the ArrayList<T> or instantiating it).
+
+  2. Create Column, Row and Table TYPES and use ArrayList<T>      instead of arrays.
+
+  2. Create Product colllections and allow customer to select 
+     a product and push it into his/her shopping cart.
+
+Output:
+ Select Products:
+  1.  Rotomac Pen 0.45 @ Rs. 5.0
+  2.  Navneet book 300 pg Rs. 80.50
+  ....
+ Enter your selection (0 to quit):
+     1
+     2
+     0
+ You've following items in your order:
+   
+   1. Rotomac ...   5.0  
+   2. .....        80.50
+   ---------------------
+   Total           85.50
+      Rs. Eighty Five and Fifty paise only.
+
+What is "Vector" and why Vector has same number of methods (and some more) as "ArrayList"?
+------------------------------------------------------------
+The java.util.Vector class is created in JDK1.0 and have found inconsistency so in JDK1.2 Java API introduce ArrayList<T> class which duplicates the features of "Vector".
+
+ ArrayList means - dynamic array
+ Vector means    - dynamic array
+   

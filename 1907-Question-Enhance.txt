@@ -1,0 +1,54 @@
+ Added "TestPaper" class ( Which includes the code of main() method of previous example)
+=============================================================
+
+package in.abc;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class TestPaper {
+    private Question []questions;
+
+    //Initialization or Setup of Question Paper
+    public TestPaper(){
+        questions=new Question[5];
+        //Five single or multiple choice questions
+        questions[0]= new MultipleChoice("Text form multiple1","option1","option2","option3",new int[]{0,0,1});
+        questions[2]= new MultipleChoice("Text form multiple2","option1","option2","option3",new int[]{1,0,1});
+        questions[4]= new MultipleChoice("Text form multiple3","option1","option2","option3",new int[]{1,1,1});
+
+        questions[1]= new SingleChoice("Text form single","option1","option2","option3",1);
+        questions[3]= new SingleChoice("Text form single","option1","option2","option3",2);
+    }
+
+    public void startTest(){
+        for(Question q: questions) {
+            q.display();
+            if(q.isCorrect()) {
+                System.out.println("Very good. Your are right");
+            } else {
+                System.out.println("Sorry!");
+            }
+        }
+    }
+    public  int getCorrectCount() {
+        int c=0;
+        for(Question q: questions) {
+            if(q.isCorrect()) {
+                c++;
+            }
+        }
+        return c;
+    }
+}
+
+
+package in.abc;
+
+public class Main {
+    public static void main(String[] args) {
+        TestPaper paper=new TestPaper();
+        paper.startTest();
+        System.out.println("Correct Count " + paper.getCorrectCount());
+    }
+}

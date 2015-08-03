@@ -1,0 +1,205 @@
+Program to represent following data
+=====================================================
+<table>
+   <tr>
+      <td>10</td>
+      <td>Raj</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>Raj</td>
+    </tr>
+</table>
+
+Hint: Define "Column", "Row" and "Table" classes:
+
+class Column {
+    String data;
+    @Override public String toString() {
+       return "<td>" + data + "</td>";
+    }
+}
+
+class Row {
+      Column []colums;
+      public Row(int cols) { 
+           columns = new Column[cols];
+            for(int i=0;i<cols;i++) {
+               columns[i] = new Column();
+            } 
+      }
+      @Override public String toString() {
+         StringBuilder sb=new StringBuilder();
+         sb.append("<tr>"); 
+         for(Column c : columns) {
+           sb.append(c.toString());
+         }
+         sb.append("</tr>");
+         return sb.toString();
+      }
+}
+class Table {
+      Row []rows;
+       public Table(int row,int col) {
+            rows = new Row[row];
+            for(int i=0;i<row;i++) {
+               rows[i] = new Row(col);
+            }
+      }
+} 
+
+Example code
+===============
+/**
+ * Created by Prajapati on 7/20/2015.
+ */
+package in.ts;
+
+public class Column {
+    private String data;
+
+    public Column() {
+        data="";
+    }
+
+    public Column(String data) {
+        this.data = data;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        return "<td>" + data  + "</td>";
+    }
+}
+
+package in.ts;
+
+import java.util.Arrays;
+
+/**
+ * Created by Prajapati on 7/20/2015.
+ */
+public class Row {
+    private Column []columns;
+
+    public Row(int cols) {
+       columns = new Column[cols];
+        for(int i=0;i<cols;i++){
+            columns[i] = new Column();
+        }
+    }
+
+    public Column[] getColumns() {
+        return columns;
+    }
+
+    public void setColumns(Column[] columns) {
+        this.columns = columns;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        sb.append("<tr>");
+        for(Column c:columns) {
+            sb.append(c.toString());
+        }
+        sb.append("</tr>");
+        return sb.toString();
+    }
+
+    //Extra Methods - get or set a column
+
+    public Column getColumn(int index) {
+        return columns[index];
+    }
+    public void setColumn(int index,Column column){
+        columns[index] = column;
+    }
+    public void setData(int index,String value){
+        columns[index].setData(value);
+    }
+}
+
+package in.ts;
+
+import java.util.Arrays;
+
+/**
+ * Created by Prajapati on 7/20/2015.
+ */
+public class Table {
+    private Row []rows;
+    public Table(int row, int col) {
+        rows = new Row[row];
+        for(int i=0;i<row;i++){
+            rows[i] = new Row(col);
+        }
+    }
+
+    public Row[] getRows() {
+        return rows;
+    }
+
+    public void setRows(Row[] rows) {
+        this.rows = rows;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb=new StringBuilder();
+        sb.append("<table>");
+        for(Row r: rows) {
+            sb.append("\n" +r.toString());
+        }
+        sb.append("</table>");
+        return sb.toString();
+    }
+
+    public void setData(int row,int col, String data){
+        rows[row].getColumn(col).setData(data);
+    }
+}
+
+
+Use these classes in your ways:
+
+For example:
+
+        Row c=new Row(3);
+
+        //c.getColumns()[0].setData("No");
+        //c.getColumns()[1].setData("Name");
+        //c.getColumns()[2].setData("Age");
+        //OR
+        //c.getColumn(0).setData("No");
+        //c.getColumn(1).setData("Name");
+        //c.getColumn(2).setData("Age");
+        //OR
+        c.setData(0,"No");
+        c.setData(1,"Name");
+        c.setData(2,"Age");
+        System.out.println(c);
+
+
+Another example:
+
+        Table t=new Table(3,2);
+        t.getRows()[0].getColumn(0).setData("No");
+        t.getRows()[0].getColumn(1).setData("Name");
+        t.getRows()[1].getColumn(0).setData("10");
+        t.getRows()[1].getColumn(1).setData("Raj");
+       //t.getRows()[2].getColumn(0).setData("20");
+       // t.getRows()[2].getColumn(1).setData("Man");
+        t.setData(2,0,"20");
+        t.setData(2,1,"Man");
+
+        System.out.println(t);

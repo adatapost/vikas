@@ -1,0 +1,119 @@
+ The Java Platforms
+ ------------------------------------------------------------
+
+ The term "framework" or "platform" is an abstract idea comes from
+ the theory - Inversion of Control (IoC). This theory is bit complex  but it is explained by the statement called "Holywood principle" - "Don't call us, we will call you". Whatever you want, please submit your demands to us, we  will consider your demands and let you know".
+
+ Here, the platform is a computing environment that is used to develop, deploy and execute the programs/apps in a highly distributed environment of the Internet.
+
+ The operating system is the main platform and number of sub-platforms  are introduced to ease the software development,deployment and  execution.
+
+ Three Java platforms:
+    1. Java SE - Standard Edition includes java language, 
+                 Java core API and Java Runtime Environment (JRE).
+                 Java SE is the base framework for other frameworks
+		 and technologies : Java EE, Java ME, Android etc.
+
+    2. Java ME - Micro Edition for mobile, electonics devices etc.
+    3. Java EE - Enterprise Edition - Web apps, Service Apps, 		 Enterprise apps.
+
+And the JavaSE platform is also included with Android platform (Introduced and controlled by Google).
+
+Install Java SE and configure the Path and JAVA_HOME
+-------------------------------------------------------
+You can download latest release of JavaSE from oracle.com for your OS (32 or 64 bits).
+In Windows OS, JavaSE (JDK) will be installed under 
+    x:\Program Files\Java folder by default.
+
+ After installing JDK, set following environment variables:
+
+  JAVA_HOME  = X:\Program Files\Java\jdk.x.x
+  Path       = ......;X:\Program Files\Java\jdk.x.x\bin;
+              
+  To set environment variables => Control Panel + System + Advanced System Settings + Environment Variables + Click on New or Edit to create or update variables.
+
+[ Test the environment settings, open command prompt and type "javac"   and press enter"]
+
+ Java Types (Data Type) System
+ ===================================================================
+ There are two types of datatypes in Java:
+
+   1. Compiler (Language) datatype - Data type is also called "class"
+      and compiler datatypes are also classes but these classes
+      are not designed as per object-oriented rules.
+
+      There are eight compiler datatype or primitive datatypes:
+         1. byte	1 byte
+         2. boolean	Not Available (1 bit internally)
+         3. short 	2 bytes
+         4. int		4 bytes
+         5. long	8 bytes
+         6. float	4 bytes
+         7. double	8 bytes
+         8. char	2 bytes - unicode UTF-16 (Unicode Text Format) character set.  Unicode charset allow us to store alphabets and chars from English and non-English languages (Gujarati, Hindi etc).
+
+  2.  Reference datatypes - classes which are sub-class of       java.lang.Object class.  
+      Apart from the 8 primitive datatypes, all other data-types in 	Java falls under "Reference datatypes".
+      Java's Core APIs, Android APIs and other platform APIs are 
+	example of reference types.
+ 
+      Reference types also known as "library" or "Application       Programming Interface (API) and they are designed using Object-      oriented paradigm.
+
+      Primitive types are not a part of Java Core APIs so in later version of Java SE, new classes are introduced which are equivalent of primitive classes (or duplicate of primitive) and these classes are called "Wrapper classes".
+     
+       Primitive classes		Wrapper classes
+       ------------------------------------------------------
+         byte				java.lang.Byte
+	 short				java.lang.Short
+	 integer			java.lang.Integer
+	 long				java.lang.Long
+	 float				java.lang.Float
+	 double				java.lang.Double
+	 boolean			java.lang.Boolean
+	 char				java.lang.Character
+
+ Rules and conventions of data-types in Java
+ --------------------------------------------
+ Everybody must have to understand and use the certain rules to use or 
+ create datatypes/classes/types.
+
+   1. Package name must be in lower letter only.
+   2. Use two or more level package for your classes.
+		e.g  in.adatapost.Employee  -- valid
+		     in.adatapost.staff.Salary - valid
+                     In.Avd.Employee - Wrong
+   3. Name of class, interface, enum or annotation must have
+	"ProperCase" or "TitleCase" pattern - Capitalize the first
+	 letter or each word and do not add underscrore.
+      e.g
+           HelloApplication - valid
+	   hello	    - wrong
+	   TestApp	    - valid
+	   My_App	    - wrong
+   4. Variables and method (function) names must be in "camelCase".
+       First word must be in lower case and then capitalize the
+	first letter of each word. Do not add underscore.
+ 	e.g
+	amountToBeTaken - valid
+        amount_to_be	invalid
+        getName()	valid
+        getname()	invalid
+  5. Each class/type definition should be created in a separate .java
+	file and .java file name and class name should be same.
+        However you can have more than one non-public types in a         single .java file.
+  6. .java file program structure must contains following statements
+	in following order:
+
+       1. package statement
+       2. import statement
+       3. type definition statements
+
+e.g
+ 
+package in.avd.model;
+
+import java.io.File;
+
+public class MyApp {
+  //
+} 

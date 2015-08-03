@@ -1,0 +1,28 @@
+ final keyword - To create constant variables
+ --------------------------------------------------------------------
+ Constant variables are such variables whose value cannot be changed
+ during program execution and hence we must declare them "static &  public".
+
+ Do not use static & public if final variable is declared inside the  function (local scope).
+
+ Always use UPPER names to name the final variables.
+
+ Example:
+
+package com.vikas;
+
+class Test {
+   public  static final double PI = 3.14; //field
+}
+
+class First {
+  public static final String STATE = "Gujarat"; //field 
+
+   public static void main(String []args) {
+       final int MAX = 500;  //Local constant variable
+       System.out.println( MAX );
+       //MAX = 90; //error
+       
+       System.out.println(Test.PI + " " + First.STATE);
+   }     
+}

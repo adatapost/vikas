@@ -1,0 +1,180 @@
+ @Override annotation
+ ----------------------------------------------------
+
+ When we want to instructs the JVM or compiler via code, we
+ will have to use "annotation" type.
+
+ For example, if we override super's method with different
+ signature in sub-class then there will be no message and also
+ our method wont be overriden actually.
+
+ If you use @Override annotation with your subclass method,
+
+    @Override
+    public void speak() {} 
+  
+or  @Override public void speak() { }
+
+ then compiler will check the very same definition and its signature into the super class and if it does not match then
+ stop the compilation and throws an exception.
+
+Note: We will always use @Override annotation while overinding a method or implementing an interface method.
+
+Overrinding Object's equals , hashCode and toString methods
+-------------------------------------------------------------
+
+Nearly all Java APIs classes have override all three methods.
+
+ equals - It returns true if objects are equal, returns false
+          otherwise.
+          @Override public boolean equals(Object obj) {}
+ hashCode- It returns integer number that is based upon the
+           object data.
+          @Override public int hashCode(){}
+ toString() - It returns a string which is an information of
+              your object for debug purpose.
+          @Override public String toString(){}
+
+Example:
+
+package in.ts;
+
+class Product {
+   private int id;
+   private String name;
+   public Product() { id =0; name = "";}
+   public Product(int id,String name) { this.id=id; this.name=name;}
+   //getter & setter
+
+   //Override methods 
+   @Override
+   public int hashCode() {
+      int hash = 0;
+      hash = hash + id;
+      hash = hash + (name==null ? 0 : name.hashCode());
+      return hash;
+   }
+   @Override
+   public boolean equals(Object obj) {
+      /*Product other = (Product) obj;
+      if(id != other.id) return false;
+      if(!name.equals(other.name)) return false;
+      return true; */
+      return hashCode() == obj.hashCode();
+   }
+   @Override
+   public String toString() {
+     return "Tushar - Product (" + id + "," + name + ")";
+   }
+}
+class Test {
+  public static void main(String []args) {
+     String str1 = new String("Tushar");
+     String str2 = new String("Tushar");
+
+     //This is illegal - We are comparing references of objects
+     if(str1 == str2) {
+       System.out.println("Equal");
+     } else {
+       System.out.println("Unequal");
+     }
+     //To compare the content of objects use equals() method
+     if(str1.equals(str2)) {
+       System.out.println("Equal");
+     } else {
+       System.out.println("Unequal");
+     }
+
+  System.out.println(str1.hashCode() + " " + str2.hashCode());
+
+  Product p1=new Product(13,"Pen");
+  Product p2=new Product(10,"Pen");
+
+  System.out.println(p1.hashCode() + " " + p2.hashCode());   
+
+  if(p1.equals(p2)) {
+     System.out.println("Equal");
+   } else {
+     System.out.println("Unequal");
+   }
+
+  //will call toString() method automatically which is used to
+  //dump or learn object data for debugging purpose.
+   System.out.println(p1);
+   System.out.println(p2);
+  }
+}
+
+Anonymous Inner class
+==============================================================
+
+ Following syntax declare nameless (anonymous) class:
+
+     1.  
+
+       InterfaceName  refName = new  InterfaceName() {
+         //implement methods here..
+       };
+
+     2. 
+ 
+       ClassName refName = new ClassName() {
+          //override methods
+       };
+
+ Above syntax is used to create a new class anywhere - inside  the method, class or outside the method.
+
+ Understanding of syntax:
+  new  (class ? implements InterfaceName { 
+          //method
+         }) 
+
+  new  (class ? extends ClassName { 
+          //method
+         }) 
+
+The Java compiler compiles anonymouse classes as ContainingClassName$1.class etc.
+
+e.g   Test$1.class, Test$2.class
+Example:
+package in.ts;
+ 
+class Language {
+   public void speak() {}
+}
+interface Shape {
+  void draw();
+}
+class Test {
+  public static void main(String []args) {
+      //Sub class of "Object"
+      Object myName = new Object() {
+         @Override public String toString() {
+          return "I am Vikas. I live in Surajnagar, Dabhi";
+         }
+      };
+
+        Date now = new   Date() {
+           @Override public String toString(){
+               return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss a").format(this);
+           }
+        };
+        System.out.println(now);
+     
+     //Sub class of Language
+     Language iCan = new Language() {
+      @Override public void speak() {
+         System.out.println("I can speak Gujarati, Hindi and English.");
+      }
+     };
+      //Implements Shape interface
+      Shape circle = new Shape() {
+        @Override public void draw() {
+           System.out.println("Circle drawn.");
+         }
+      };
+      System.out.println(myName);
+      iCan.speak();
+      circle.draw();
+  }
+}

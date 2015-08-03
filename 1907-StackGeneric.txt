@@ -1,0 +1,40 @@
+package in.abc;
+
+/**
+ * Created by Prajapati on 7/19/2015.
+ */
+public class Stack<T> {
+    private T []items;
+    private int top;
+    public Stack(T items[]){
+        this.items = items;
+        top=-1;
+    }
+    public void push(T item){
+        top++;
+        items[top] = item;
+    }
+    public T pop(){
+        return items[top--];
+    }
+}
+
+
+package in.abc;
+
+public class Main {
+    public static void main(String[] args) {
+       Stack<Integer> intStack = new Stack<Integer>(new Integer[5]);
+        intStack.push(10);
+        intStack.push(20);
+        intStack.push(30);
+        intStack.push(40);
+        intStack.push(50);
+
+        System.out.println(intStack.pop());
+        System.out.println(intStack.pop());
+        System.out.println(intStack.pop());
+
+    }
+}
+

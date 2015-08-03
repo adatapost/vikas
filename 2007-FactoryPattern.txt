@@ -1,0 +1,103 @@
+ Factory Pattern design
+ ============================================================
+ Factory pattern classes provide static methods which returns
+ a new instance of the very same classes or other classes.
+
+ Sometimes, for the sake of ease or simplicity, we as a  developer helps people to create an object.
+
+ Another reason to design "Factory" class is to prevent to  instantiate class using "new" keyword -- because object creation takes extra effort or data and user might not provide
+ all these things.
+
+ Naming convention for factory method:
+
+        newInstance(params...)
+        createInstance(params...)
+        createYourTypeName(params...)
+
+ How to create a factory class?
+   1. First of all add "private" constructor if you don't want
+      people to instantiate the class via "new" keyword. However
+      this step is optional.
+
+   e.g    public class Column {
+                ....
+                private Column(){}
+          }
+   2. Add "static" method in your class.
+
+          public static Column newInstance(String data) {
+               Column c = new Column();
+               c.data = data;
+               return c;
+          }
+  In main code :
+            Column c = Column.newInstance("No");
+            Column c1 = Column.newInstance("Name");
+
+Add following methods in your Column class
+-------------------------------------------
+   private Column() {
+    }
+    public static Column newInstance(String data){
+        Column c=new Column();
+        c.data = data;
+        return c;
+    }
+Add following methods in your "Row" class
+---------------------------------------------------------
+    private Row(){}
+    public static Row newInstance(int cols){
+          Row r = new Row();
+          r.columns = new Column[cols];
+          for(int i=0;i<cols;i++) {
+              r.columns[i] = Column.newInstance("");
+          }
+         return r;
+    }
+Add following methods into "Table" class
+----------------------------------------------------------
+    private Table(){}
+    public static Table newInstance(int row,int col){
+        Table t = new Table();
+        t.rows = new Row[row];
+        for(int i=0;i<row;i++) {
+            t.rows[i]= Row.newInstance(col);
+        }
+        return t;
+    }
+   //Populate Table based upon the two dim string array
+    public static Table newInstance(String [][]items){
+        Table t = new Table();
+        t.rows = new Row[items.length];
+        for(int i=0;i<items.length;i++) {
+            t.rows[i]= Row.newInstance(items[i].length);
+            for(int j=0;j<items[i].length;j++) {
+                t.rows[i].setData(j,items[i][j]);
+            }
+        }
+        return t;
+    }
+
+And test methods into main code:
+
+        Column c = Column.newInstance("No");
+        System.out.println(c);
+        Row r = Row.newInstance(10);
+        System.out.println(r);
+        Table t = Table.newInstance(10,20);
+        System.out.println(t);
+        String [][]items={
+                {"No","Name"},
+                {"10","Rajesh","40"},
+                {"20","Mohan"}
+        };
+        Table t1 = Table.newInstance(items);
+        System.out.println(t1);
+
+        System.out.println(Table.newInstance(
+                new String[][]
+                        {
+                                {"Roll","Name"},
+                                {"1","A"}
+                        }));
+

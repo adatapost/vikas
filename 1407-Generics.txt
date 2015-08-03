@@ -1,0 +1,198 @@
+ Generics or Templated Types
+ -------------------------------------------------------------
+ 
+ Generic is a Java compiler/language feature to re-use the 
+ existing compiled code by placing or passing existing "TYPES".
+
+ For example, we need to create a Stack class to represent "int" items then class definition would be:
+ 
+ class StackInt {
+    int []items;
+    public void push(int item){}
+    public int pop() { ...}
+ }
+ 
+ To represent "float" items into a "Stack" :
+
+ class StackFloat {
+    float []items;
+    public void push(float item){}
+    public float pop() { ...}
+ }
+
+ And to represent "String" items then we must have to create a new class named "StackSTring" and so on.
+
+ You can see and understand the behavior of StackXXXX clsses. In each "Stack" class we're replacing "TYPE" (datatype) name and nothing else.
+
+ The "Generic" feature allow us to create a "placeholder" for such "TYPES". i.e Parameters. 
+
+Here is an example of parameterized or generic type in Java:
+
+  class Stack<T> {
+     T items[];
+     public void push(T item) {}
+     public T pop() { ... }
+ }
+
+Syntax
+-------
+The "interface" and "class" category of TYPE can be declared parameterized types:
+
+ interface InterfaceName<Type1,Type2,...> { }
+ class ClassName<Type1,Type2,...> extends ClassName<Type1....>
+                                  implements Interface<Type..>
+ {
+ }
+
+ The "Type" in < > (called Diamond) must be a sub-class of
+ java.lang.Object. That means we cannot use "primitive" types
+ (char,int,float, double,boolean etc) with "Generic" or "Parameterized" Types.
+
+  
+ The name of "Type" parameter should be upper letter. However  you can use any valid identifier.
+
+ e.g class Pair<Key,Value>{}  or class Pair<K,V> {}
+     class List<Item>{} or class List<I> {} or List<E> {}
+
+
+Example:
+
+package in.vikas;
+
+class Data<T> {
+    private T value;
+    public T getValue() {
+        return value;
+    }
+    public void setValue(T value) {
+        this.value = value;
+    }
+}
+class Pair<K,V> {
+    private  K key;
+    private V value;
+    public K getKey() { return key; }
+    public void setKey(K key) { this.key = key; }
+    public V getValue() { return value; }
+    public void setValue(V value) { this.value = value; }
+}
+public class Main {
+    public static void main(String[] args) {
+        Data<Integer> no = new Data<Integer>();
+        Data<String> name=new Data<String>();
+        no.setValue(10);
+        name.setValue("Raj");
+        System.out.println(no.getValue() + " " 
+                        + name.getValue());
+
+        Pair<Integer,String> std= new Pair<Integer, String>();
+        std.setKey(20);
+        std.setValue("Man");
+        System.out.println(std.getKey() + " " + std.getValue());
+    }
+}
+
+Homework: 
+1. Create Stack<T> type
+2. Create an app which represents single choice and multiple    choice questions. Also write code to test the each & every    question (single or multiple choice) by accepting user input
+   from the console.
+    e.g
+         Q-2  What is DOS?
+              1.  Distrib Op System
+              2.  Disk Opr Ssytem
+              3.  Dyanamic Op System
+              Enter your choices : (0 for incorrect 1 for correct :
+                 1 0 1
+              Result: Correct
+
+class Question {
+   private String text;
+   private String optionOne, 
+                  optionTwo,
+                  optionThree;
+   public void display() { }
+   public boolean isCorrect(){ return false;}
+}
+
+class Single extends Question {
+   private int correctAnswer, userAnswer;
+   @Override
+    public boolean isCorrect() { 
+           return correctAnswer == userAnswer;
+    }
+   @Override
+   public void display() {
+     System.out.println(getText());
+     System.out.println("1." + getOptionOne());
+     System.out.println("2." + getOptionTwo());
+     System.out.println("3." + getOptionThree());
+
+     System.out.println("Enter your choice : ");
+     java.util.Scanner sc = new java.util.Scanner(System.in);
+     userAnswer = sc.nextInt();
+    }
+
+  public Single(String text,String optionOne, String optionTwo, String optionThree, int correctAnswer) {
+    super(text,optionOne,optionTwo,optionThree);
+    this.correctAnswer = correctAnswer;
+  }
+}
+class Multiple extends Question {
+   private int []correctAnswer = new int[3];
+   private int []userAnswer = new int[3];  
+   @Override
+    public boolean isCorrect() { 
+           return correctAnswer[0] == userAnswer[0]
+                   && correctAnswer[1]==userAnswer[1]
+                      && correctAnswer[2] == userAnswer[2];
+    }
+   @Override
+   public void display() {
+      same as "Sample.display" ......
+
+     System.out.println("Enter your choices 1 for correct and 0 for incorrect : ");
+     java.util.Scanner sc = new java.util.Scanner(System.in);
+     userAnswer[0] = sc.nextInt();
+     userAnswer[1] = sc.nextInt();
+     userAnswer[2] = sc.nextInt();
+    }
+  public Multiple(String text,String optionOne, String optionTwo, String optionThree, int []correctAnswer) {
+    super(text,optionOne,optionTwo,optionThree);
+    this.correctAnswer = correctAnswer;
+  }
+}
+
+code in main:
+
+
+ Question qs[] = new Question[3];
+
+  qs[0] = new Single("What is an OS?",
+                      "It is operating system",
+                      "It is old storage.",
+                      "It is option system",1);
+
+  qs[1] = new Multiple("What is an ?",
+                      "First option",
+                      "asesae.",
+                      "adsasd",new int[]{0,1,1});
+
+
+  qs[2] = new Single("What is an OS?",
+                      "It is operating system",
+                      "It is old storage.",
+                      "It is option system",3);
+
+ for(Question q: qs) {
+   q.display();
+ }
+
+  for(Question q: qs){
+     if(q.isCorrect()) {
+           System.out.println("Correct question : " + q.getText());
+   }
+  }
+
+
+
+

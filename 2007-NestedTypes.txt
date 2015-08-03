@@ -1,0 +1,42 @@
+ Nested Types Design pattern
+ =============================================================
+ To group up related TYPES (classes/interface etc), we can  easily use the Nested design pattern.
+
+ General Syntax:
+
+  access-modifier class ClassName ... {
+     
+      access-modifier static class ClassName { }
+      access-modifier static interface InterfaceName{}
+      ......
+   } 
+
+  Note: Above mentioned design can have super, sub classes and
+  interface implementations as usual.
+
+
+  The enclosed type is defined with "static" modifier into  "enclosing" type is called "Nested Type".
+
+Example:
+
+package in.test;
+
+public class College {
+    //fields & methods of College class
+
+    public static class Student {
+         //fields & methods of Student class
+    }
+    public static class Staff {
+          //fields & methods of Staff class
+    }
+}
+
+You can instantiate classes:
+
+  in.test.College col = new in.test.College();
+  
+  in.test.College.Staff staff = new in.test.College.Staff();
+ //Or College.Staff staff = new College.Staff();
+  
+  College.Student std = new College.Student();

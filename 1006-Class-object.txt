@@ -1,0 +1,368 @@
+ Java Class & Objects
+ ===================================================================
+ To define a class ( or datatype) means to create a new datatype  (custom datatype). Any problem in the computing world is solved 
+ by the or through the class/datatype.
+
+ In Java, we will use "class" keyword to create our own datatype but  it is automatically inherits/extends the java.lang.Object class.
+
+ Syntax:
+
+access_modifier class ClassName extends SuperClassName
+                                implements interface1,2,... {
+   //fields or data-members
+   //methods or function-members
+}
+
+Access modifiers
+-----------------
+Access modifiers are keywords or reserved words which are used to hide or show the class and its implementation. In other words, we can define "abstraction" using access modifiers.
+
+There are four modifiers:
+
+ 1. public - public entities have no access restrictions. They can be
+	     visible anywhere - inside or outside the package or 	     class.
+
+ 2.        - There is no official keyword for this access - It is 	     called "package-level-private" access.
+	     These entities are visible inside the package in which
+		they are created/defined.
+ 3. protected - These entities are only visible inside the class or
+		it's sub-classes.
+
+ 4. private - These entities are only visible inside the class in 		which they are created.
+
+ 
+Top-level types must be either package-level-private or public. We cannot use private or protected access for top-level types.
+
+If top-level type is public then class name and file name (.java) must be same.
+
+e.g.
+
+package in.ts;
+public class Hello {}    <-- It code must be saved as Hello.java file.
+
+Nested types (class inside another class) can have following accessibilities:
+
+Type		Default		We can change access
+		Access
+---------------------------------------------------------------------
+class		package-level	public, private, protected, package
+				level-private
+
+interface	public		We can't change
+
+enum		public		public, private, package-level
+
+annotation	public		We can't change
+
+class A {
+   class P{} // package-level
+   int no; // package-level
+   void p() { } //package-level
+   private class H{}
+}
+interface H {
+   int n; // public;
+   void k(); //public
+   public void h();  //public
+ }
+
+Understand reference variable & object
+--------------------------------------------------------------
+
+package in.ts;
+
+class Test {
+   public int no;
+}
+public class MainApp {
+   public static void main(String []args) {
+       Test a = new Test();
+       Test b = a;
+
+       a.no = 10;
+       b.no = 20;
+
+       System.out.println(a.no + " " + b.no);
+   }
+}
+
+
+ Test a = new Test();
+
+      An object of "Test" will be created and its memory address is
+      assigned to reference variable "a". (Which is 1000).
+
+ Test b = a; 
+
+       In this statement, we are going to copy the value of "a" 	variable  to "b" variable. It means variable "b" contains
+        memory address of "object" (which is 1000).
+
+
+Suppose,
+
+  Test a = new Test();
+  Test b = new Test();
+  new Test();
+     
+      In above sample, three objects are created (they have different       memory addresses) but we are not storing reference of third          object and hence it will be not used for future purpose.
+
+How to design a class/type?
+-------------------------------------------------------------------
+Basic guideline to design a class in Java are:
+
+ 1. Class should be public.
+ 2. Data-members or fields must be private
+ 3. To encapsulate the fields, create public methods called "setter"     and "getter"
+ 4. Create appropriate constructors to initialize the fields.
+ 5. Override the some of the Object class methods - equals, hashCode     and toString. (We will discuss it in later session).
+
+Example: Create "Student" class with two fields roll & name.
+
+package in.ts;
+
+class Student {
+   //fields
+   private int roll;
+   private String name;
+
+   //methods - getters & setters 
+   public int getRoll() {
+      return roll;
+   }
+   public String getName() {
+     return name;
+   }
+   public void setRoll(int v) {
+      if(v>=1 && v<=100) {
+        roll = v;
+      }
+   }
+   public void setName(String v) {
+     if(v==null){
+        return;
+      }
+     if(v.length()>30) {
+         return;
+     }
+      name = v;
+   } 
+} //end of Student class
+
+public class MainApp {
+  public static void main(String []args) {
+     Student s = new Student(); // allocate memory for roll & name
+
+     s.setRoll(-100); 
+     s.setName("ssddasfdasf fdsf dasfdsakfdasf dsf");
+
+     System.out.println(s.getRoll() + " " + s.getName());
+  }
+}
+
+
+Rules to create getter & setter:
+
+   add "get" or "set" prefix to the field name with camelCase.
+  e.g
+      public class Product { 
+          private int productId;
+          private String productName;
+          public void setProductId( int v) {}
+          public int getProductId() { .. }
+          public void setProductName( String v ) {}
+          public String getProductName() { .. }
+      }
+
+Example: Input valid date and print its next date.
+
+ e.g
+ 31 1 2001   =>  1  2 2001
+ 28-2-2001   =>  1-3-2001
+ 31-12-2001  =>  1-1-2002
+
+
+if(m==12 && d ==31) {
+   m=1;
+   d=1;
+   y++;
+} else if(m==12 ) {
+   d++;
+}
+ 
+   
+Example: Input valid date and print its previous date.
+
+e.g
+
+1-1-2001  =>  31-12-2000
+1-2-2001  =>  31-1-2001
+1-3-2001  =>  28-2-2001
+
+Example: Write a class to hold roll,name and marks of three subjects.
+
+Student.java
+-------------
+package in.ts;
+public class Student {
+ private int roll;
+ private String name;
+ private int math,english,science;
+
+ public int getRoll() { return roll;}
+ public void setRoll(int v) { roll = v;}
+ public String getName() { return name;}
+ public void setName(String v) { name = v;}
+ public int getMath() { return math;}
+ public void setMath(int v) { math = v;}
+ public int getEnglish() { return english;}
+ public void setEnglish(int v) { english = v;}
+ public int getScience() { return science; }
+ public void setScience(int v) { science = v; }
+
+ //extra methods
+ public int getTotal() {
+    return math + science + english;
+ }
+ public double getPercent() {
+    return getTotal() / 3.0;
+ }
+ public String getGrade() {
+     double per = getPercent();
+     if( per>=70 ) return "A";
+     if( per>=60 ) return "B";
+     if( per>=50 ) return "C";
+     return "D";  
+ }
+} //end of class
+
+
+StudentTest.java
+--------------------
+package in.ts;
+
+public class StudentTest {
+  public static void main(String []args) {
+    Student s = new Student();
+    s.setRoll(10);
+    s.setName("Raj");
+    s.setMath(20);
+    s.setEnglish(78);
+    s.setScience(87);
+
+    System.out.println("Roll     : " + s.getRoll());
+    System.out.println("Name     : " + s.getName());
+    System.out.println("Maths    : " + s.getMath());
+    System.out.println("Science  : " + s.getScience());
+    System.out.println("English  : " + s.getEnglish());
+    System.out.println("Total    : " + s.getTotal());
+    System.out.println("Percent  : " + s.getPercent());
+    System.out.println("Grade    : " + s.getGrade());
+  }//end of main
+} //end of class
+
+
+In case if we want to read value from keyboard then change following code:
+
+package in.ts;
+
+public class StudentTest {
+  public static void main(String []args) {
+    java.util.Scanner sc = new java.util.Scanner( System.in );
+    Student s = new Student();
+
+    System.out.print("Roll : ");
+    s.setRoll(sc.nextInt());
+
+    System.out.print("Name : ");
+    s.setName(sc.next());
+
+    System.out.print("Maths : ");
+    s.setMath(sc.nextInt());
+
+    System.out.print("English : ");
+    s.setEnglish(sc.nextInt());
+
+    System.out.print("Science : ");
+    s.setScience(sc.nextInt());
+    
+    ...... as per previous program .....
+
+  }//end of main
+} //end of class
+
+Example: Add an extra method to Student class called - 
+   setStudent(int mRoll, String mName, int mEnglish, int mMath, int mScience);
+
+Student.jva
+------------
+package in.ts;
+public class Student {
+   ......
+   ...... as per previous example .....
+
+   public void setStudent(int mRoll, String mName, 
+                    int mEnglish, int mMath, int mScience) {
+        roll = mRoll;
+        name = mName;
+        math = mMath;
+        english = mEnglish;
+        science = mScience;
+  }
+  public void print() {
+     System.out.println("Roll      : " + roll);
+     System.out.println("Name      : " + name);
+     System.out.println("Maths     : " + math);
+     System.out.println("English   : " + english);
+     System.out.println("Science   : " + science);
+     System.out.println("Total     : " + getTotal());
+     System.out.println("Percent   : " + getPercent());
+     System.out.println("Grade     : " + getGrade());
+  }
+}//end of class
+
+
+StudentTest.java
+--------------------
+package in.ts;
+public class StudentTest {
+ public static void main(String []args) {
+   Student s = new Student();
+
+   Student t = new Student();
+   
+   s.setStudent(10,"Manish",77,88,99);
+   t.setStudent(20,"Mohan",76,55,45);
+  
+   s.print();
+   t.print();
+  }
+}
+
+Example: Design product class with getter/setter and extra methods.
+
+package in.ts;
+public class Product {
+    private int id;
+    private String name;
+    private String category;
+    private double quantity;
+    private double amount;
+    ........
+}
+
+Example: Design ElectricityBill
+package in.ts;
+public class ElectricityBill {
+ private int meterNo;
+ private String customerName;
+ private int unitConsum;
+
+ .....
+}
+Example: Design Date class
+
+package in.ts;
+public class Date {
+   int day,month,year;
+   ......
+}   

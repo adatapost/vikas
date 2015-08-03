@@ -1,0 +1,320 @@
+Example - 1
+
+public class Product {
+    private Integer id;
+    private String name;
+    private String category;
+    private String unit;
+    private double rate;
+
+    public Product(Integer id) {
+        this.id = id;
+    }
+    public Product(Integer id, String name, String category, String unit, double rate) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.unit = unit;
+        this.rate = rate;
+    }
+
+    public Product() {
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getUnit() {
+        return unit;
+    }
+
+    public void setUnit(String unit) {
+        this.unit = unit;
+    }
+
+    public double getRate() {
+        return rate;
+    }
+
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o.hashCode() == hashCode();
+    }
+    @Override
+    public int hashCode() {
+         return id.hashCode();
+    }
+    @Override
+    public String toString() {
+        return id + ". " + name + "(" + category 
+                  + ") @ Rs. " + rate + " per " + unit;
+    }
+}
+
+Test-1 (Code in main) - Search a product
+-----------------------------------------
+
+ List<Product> products = new ArrayList<Product>();
+ products.add( new Product
+                (10,"Navneet HB 6","Pencil","Dozen",80));
+ products.add( new Product
+                (2,"Natraj HB 6","Pencil","Dozen",86));
+ products.add( new Product
+                 (32,"Navneet Fullscape book","Notebook",
+                                            "Dozen",480));
+ //List products
+ for (Product product: products) {
+     System.out.println(product);
+ }
+
+ System.out.println("Enter your product (by Id) : ");
+ int choiceId = new Scanner(System.in).nextInt();
+ int index;
+ Product search = new Product(choiceId);
+ if( (index = products.indexOf(search) ) !=-1 ) {
+     System.out.println( products.get(index));
+  } else {
+     System.out.println("Not found");
+  }
+
+
+Or
+Scanner scan = new Scanner(System.in);
+int choiceId = scan.nextInt();
+Product search = new Product(choiceId);
+int index = products.indexOf( search );
+if( index != -1 ) {
+  S.o.p( products.get( index ) );
+} else {
+  //Not found
+}
+
+Test - 2 Search a product using contains method
+
+.....
+.....
+ System.out.println("Enter your product (by Id) : ");
+ int choiceId = new Scanner(System.in).nextInt();
+ Product search = new Product(choiceId);
+ if( products.contains( search ) ) {
+    S.o.p("Found"); 
+  } else {
+     System.out.println("Not found");
+  }
+
+Test - 3 Search a product by name
+
+...
+...
+S.o.p("Enter product name : ");
+String name = new Scanner(System.in).nextLine(); //or next();
+for (Product product: products) {
+  // if( product.getName().equals(name)) {
+  if( product.getName().startsWith(name)) {
+      System.out.println(product);
+  }
+}
+
+Test - 4 List all "Pen" products
+Test - 5 List all product whose price/rate between Rs. 30 to 60 
+Test - 6 Add two more boolean fields  into "Product" class
+         namely : private boolean isAvailable
+                  private boolean isFeature;
+         [Note: Update constructors and add getter/setter 	methods]
+        
+         List all available products.
+         List all available & feature products.
+Test - 5 Remove all products whose name begins with "Na"
+Test - 6 Remove all products whose name begins with "P" and
+	 belongs to "Pencil" category.
+Test - 7 Remove all product which are not available.
+
+Test - 8 Sort the product list 
+
+To sort the collection, we must have to supply an object of java.util.Comparator<T> to the sort() method of List<T> or Collections.
+
+The Comparator<T> has a method named,
+   int compareTo(T o1, T o2) {
+     //which returns positive value if o1 > o2
+     //      returns negative if o1 < o2
+     //      returns zero if o1 == o2
+    }
+
+Example:
+....
+....
+.... 
+//Creates an object of class which implements Comparator
+IdWise idWise=new IdWise();
+products.sort(idWise);
+for (Product product: products) {
+      System.out.println(product);
+}
+
+//Or use Anonymous inner class which implements Comparator
+//Name wise sort
+products.sort(new Comparator<Product>() {
+  @Override
+  public int compare(Product o1, Product o2) {
+      return o1.getName().compareTo(o2.getName());
+  }
+});
+for (Product product: products) {
+    System.out.println(product);
+}
+
+//Rate wise descending order
+products.sort(new Comparator<Product>() {
+    @Override
+    public int compare(Product o1, Product o2) {
+       return (int) o2.getRate() - (int)o1.getRate();
+    }
+});
+for (Product product: products) {
+    System.out.println(product);
+}
+
+//We can also use java.util.Collections.sort method
+Collections.sort(products, new Comparator<Product>() {
+  @Override
+  public int compare(Product o1, Product o2) {
+      return o1.getId() - o2.getId();
+  }
+});
+
+//IdWise class definition
+class IdWise implements Comparator<Product> {
+    @Override
+    public int compare(Product o1, Product o2) {
+        if(o1.getId()> o2.getId()) return 1;
+        if(o1.getId() < o2.getId()) return -1;
+        return 0;
+    }
+}
+
+Test - 9 : Add copy() method in your Product class to copy the object.
+
+   public Product copy(){
+        return new Product(id,name,category,unit,rate);
+    }
+
+Test - 10 : Create ProductRepository class which encapsulate all above mentioned practices.
+
+public class ProductRepository {
+
+    private List<Product> products = new ArrayList<Product>();
+
+    //Add some products 
+    public ProductRepository() {
+        products.add( new Product(10,"Navneet HB 6","Pencil","Dozen",80));
+        products.add( new Product(2,"Natraj HB 6","Pencil","Dozen",86));
+        products.add( new Product(32,"Rotativille Fullscape book","Notebook","Dozen",480));
+        products.add( new Product(1,"Rotomac .45 Gel","Pen","Nog",6));
+        products.add( new Product(5,"Raynold .6","Pen","Dozen",36));
+        products.add( new Product(7,"Microsoft PS2 Mouse","Mouse","Nog",280));
+    }
+   
+    //Getter-setter
+    public List<Product> getProducts() {
+        return products;
+    }
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public void printProducts() {
+        for (Product product : products) {
+            System.out.println(product);
+        }
+    }
+    //Find product by Id
+    public Product getProductById( int id) {
+         int index = products.indexOf( new Product(id));
+         if(index==-1) return null;
+        return products.get(index);
+    }
+    //Delete product by Id
+    public boolean removeById( int id) {
+        return products.remove(new Product(id));
+    }
+   //Sort methods 
+    public void orderById(){
+        products.sort(new Comparator<Product>() {
+            @Override
+            public int compare(Product o1, Product o2) {
+                return o1.getId() - o2.getId();
+            }
+        });
+    }
+    //Filter methods - Produce a new list
+    public List<Product> filterByName(String name) {
+        List<Product> newList=new ArrayList<Product>();
+        for(Product product : products) {
+            if(product.getName().startsWith(name)) {
+               //To create a list having existing object
+               // product reference use,
+               // newList.add( product );
+
+                newList.add( product.copy()); //Use copied prod
+            }
+        }
+        return newList;
+    }
+    //Between start and end rate
+    public List<Product> filterByRate(double start,double end) {
+        List<Product> newList=new ArrayList<Product>();
+        for(Product product : products) {
+            if(product.getRate()>=start 
+                           && product.getRate()<=end) {
+                newList.add( product.copy());
+            }
+        }
+        return newList;
+    }
+}
+
+Now, test the "ProductRepository" in main method:
+
+   ProductRepository repository=new ProductRepository();
+   repository.removeById(10);
+   repository.getProductById(32).setRate(490);
+   repository.orderById();
+   repository.printProducts();
+
+   for(Product product : repository.filterByName("N")){
+       System.out.println(product);
+    }
+   for(Product product : repository.filterByRate(5,70)){
+       System.out.println(product);
+    }
+   List<Product> list1 = repository.filterByName("Navneet");
+   for( Product product: list1 ) {
+     S.o.p( product );
+   }
+
+

@@ -1,0 +1,131 @@
+ Constructor Method
+ ==================================================================
+ Constructor is a very special method of class that is called  automatically when we create an object. The name of constructor method must be same as its class name and it can be overloaded.
+
+ Example:
+
+ package in.ts;
+
+ class Test {
+   
+    //constructors
+    public  Test() {
+      System.out.println("No Argument constructor.");
+    }
+    public Test(int no) {
+      System.out.println("Int argument.");
+    }
+    public Test(String name) {
+       System.out.println("String argument.");
+    }
+}
+
+class MainApp {
+  public static void main(String []args) {
+     Test a = new Test(); //No Argument constructor
+     Test b = new Test("Hello"); // String argument
+     Test c = new Test(10); // Int argument
+   }
+}
+
+Every class has a constructor
+------------------------------
+If you don't define a constructor then Java compiler automatically adds a no argument empty constructor in your class.
+e.g
+   class Student { }  has Java compiler supplied constructor
+
+What are the usage of constructors?
+-----------------------------------
+1. To execute some code when we create objects.
+2. To initialize the fields.
+
+Constructor rules
+------------------
+1. Name must match its class name.
+2. Cannot specify return type.
+3. Should be public.
+4. It is overloaded - same name and different arguments.
+5. It cannot be inherited.
+
+Example: Add appropriate constructors to your classes.
+
+package in.ts;
+
+public class Student {
+   private int roll;
+   private String name;
+
+   //constructors
+   public Student() {
+      roll = 0;
+      name = ""; // not "  "
+   }
+   public Student(int mRoll, String mName) {
+      roll = mRoll;
+      name = mName;
+   }
+   public Student(String mName,int mRoll) {
+      roll = mRoll;
+      name = mName;
+   }
+   //getter & settter
+   public int getRoll() { return roll;}
+   public void setRoll(int mRoll) { roll=mRoll;}
+   public String getName() { return name;}
+   public void setName(String mName) { name=mName;}
+}//end of class
+
+StudentTest.java
+-----------------
+package in.ts;
+public class StudentTest{
+ public static void main(String []args) {
+    Student s1 = new Student(10,"Rajesh"); 
+    Student s2 = new Student("Manish",20);
+    Student s3 = new Student();
+    System.out.println(s1.getRoll() + " " + s1.getName());
+    System.out.println(s2.getRoll() + " " + s2.getName());
+    System.out.println(s3.getRoll() + " " + s3.getName());
+  }
+}    
+
+
+this keyword
+=============================================================
+this is a reserved word and it is used into constructors and instance methods to qualify class members ( fields & methods).
+
+There are other usage of "this" keyword:
+   1. To call / invoke a constructor from another constructor
+   2. To get current instance / object reference of class.
+
+When we define method parameters whose names similar as class's fields then we must have to use "this" qualifier to separate parameters from fields.
+
+Example: Now, at this point we will always use "this" to qulify the members.
+
+package in.ts;
+public class Date {
+    private int day,month,year;
+    public Date(){
+      day = 10; month = 6; year = 2015;
+    }
+    public Date(int day, int month, int year) {
+        this.day = day;
+        this.month = month;
+        this.year = year;
+    }
+    //getter & setters
+    public int getDay() { return day;} // or return this.day
+    public int getMonth() { return month;}
+    public int getYear() { return year;}
+
+    public void setDay(int day) {
+         this.day = day;
+    }
+    public void setMonth(int month) {
+         this.month = month;
+    }
+    public void setYear(int year) {
+         this.year = year;
+    }    
+}
+  

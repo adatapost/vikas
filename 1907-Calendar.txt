@@ -1,0 +1,61 @@
+ java.util.Calendar class
+ ==============================================================
+
+ The java.util.Calendar was introduced in Java 1.2 to fix the
+ java.util.Date class so some of the methods of Calendar and  Date class used to represent date & time data as well as  convert Calendar object to Date and vice versa.
+
+ [NOTE: In JDK1.8 Java has introduce new java.time library
+        to fix the Date & Calendar types but we will not use
+        this library because the Android still uses JDK1.7
+	features.]
+ 
+ How to use Calendar class ( because it is an abstract class)?
+  ------------------------------------------------------------
+
+   We have to call static method of Calendar.getInstance()    method, which returns an instance of Calendar.
+
+    Calendar cal = Calendar.getInstance();
+    
+
+ How to get or set calendar properties?
+ -----------------------------------------
+ There are two methods namely:
+
+         get(FIELD_TYPE) - which returns value of specified 
+				FIELD_TYPE.
+	 set(FIELD_TYPE,value) - To set new value for specified
+				 FIELD_TYPE.
+
+Example: (code in main)
+
+Calendar cal = Calendar.getInstance();
+System.out.println(cal);
+System.out.println(cal.get( Calendar.DAY_OF_YEAR ) );
+System.out.println(cal.get( Calendar.YEAR ) );
+
+//Month 0 stands for Jan, 1 for Feb and so on
+System.out.println(cal.get( Calendar.MONTH ) 1+ );
+
+//Change day and month
+cal.set( Calendar.DATE, 25);
+cal.set( Calendar.MONTH, 0); // Jan
+
+				
+Example: Obtain Date object as well as milliseconds.
+
+        Calendar cal=Calendar.getInstance();
+
+        //Obtain Date object
+        cal.set(Calendar.DATE,20);
+        Date dt = cal.getTime();
+        System.out.println(dt);
+
+        //Get Millis
+        System.out.println(cal.getTimeInMillis());
+
+        //Get thounsandth part of a second
+         System.out.println(cal.get(Calendar.MILLISECOND));
+
+Home Work - Explore the methods of "Calendar" class
+
+
