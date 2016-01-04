@@ -1,0 +1,218 @@
+ Set<E> collection
+ -----------------------------------------------------------
+ To represent unique objects (no duplicate). The uniqueness 
+ of an object is determined by the hashCode() and equals()
+ methods. 
+
+ It means any object you add inside the Set<T> must have
+ hashCode() and equals().
+
+ HashSet<T> class is an implementation of Set<T>.
+
+ Note that the order of element T into the Set is not maintained because Set<T> uses hashCode value to place them into the collection.
+
+ [Note: To have an ordered items use the ArrayList<T>]
+
+ Example: To create a set of "Product" objects.
+
+ HashSet<Product> products = new HashSet<Product>();
+ 
+ //add method - it returns true if item added successfully,
+ //             returns false otherwise.
+
+ if( products.add( new Product(1,"Rot","Pen","Ng",10) ) ) {
+    System.out.println("Product added");
+ } else {
+    System.out.println("Duplicate product.");
+ }
+ 
+ System.out.println( products.add( 
+                new Product(1,"Rot","Pen","Ng",10) )); //false
+ 
+ System.out.println( products.add( 
+                new Product(2,"Rot","Pen","Ng",10) )); //true
+
+ //List the products
+ for( Product product : products ) {
+    System.out.println( product );
+ }
+
+ //Remove an element based upon the hashCode of object
+        //Remove product whose id is 2
+        Product product = new Product(2);
+        if( products.remove(product)) {
+            System.out.println("Item removed");
+        } else {
+            System.out.println("Item not found");
+        }
+
+        //Search a product based upon hashCode
+        //Search product whose id is 10
+        Product search = new Product(10);
+        if(products.contains(search)){
+            System.out.println("Found");
+        } else {
+            System.out.println("Not found");
+        }
+
+        //size() to returns count of elements
+        System.out.println(products.size());
+        //isEmpty to check a collection is empty or not
+        System.out.println(products.isEmpty()); //false
+
+Map<K,V> collection
+----------------------------------------------------------
+Map represent Key-Value pair entries where "Key" must be unique - it means "Key" is a "Set".
+
+The "Key" object must have hashCode() and equals() method in order to work with "Map" implementation.
+
+HashMap<K,V> and Hashtable<K,V> classes
+-----------------------------------------
+Hashtable<K,V> is called "legacy" or  old class which supports old Java 1.0 features as well as new features described into Map interface.
+
+For new development, always use HashMap<K,V>.
+
+Example: Represent roll number and student's name.
+
+ HashMap<Integer,String> students = 
+                           new HashMap<Integer,String>();
+
+ //Map has methods - put(key,value) - To add/set an entry
+ //                  get(key) - Returns value if exists, returns
+ //				null otherwise
+ //                  remove(key) - Remove an entry
+ 
+ students.put(67, "Rajesh");
+ students.put(10, "Meena");
+ students.put(2,"Suraj");
+ 
+ //Update existing entry
+ students.put(2, "Seema"); //Suraj value is replaced with Seema
+
+ //Read value based upon the given key  
+ System.out.println( students.get(10)); // Meena
+ System.out.println( students.get(100)); //null - not found
+
+ //Traverse the keySet() - Set<Integer>
+  for(Integer key: students.keySet()) {
+     System.out.println(key + " : " + students.get(key));
+  }
+
+  //Traverse the values()
+  for(String value : students.values()) {
+            System.out.println(value);
+  }
+
+  //Remove student whose roll is 5
+  System.out.println( students.remove(5)); //null
+  //Remove roll value 10
+  System.out.println( students.remove(10)); //Meena
+
+  //Print elements
+  for(Integer key: students.keySet()) {
+     System.out.println(key + " : " + students.get(key));
+   }
+Example: Represent City-Pin data
+
+HashMap<String,Integer> cities = 
+                      new HashMap<String,Integer>();
+cities.put("Mehsana",384001);
+cities.put("Unjha", 312002);
+cities.put("Patan", 350043);
+
+System.out.println( cities.get("mehsana") ); // null
+System.out.println( cities.get("Mehsana") ); //384001
+
+for(String key: cities.keySet()){
+  System.out.println(key + " : " + cities.get( key ));
+}
+
+Example: Use Hashtable<K,V> instead of HashMap for practice purpose.
+In above two examples, we can use Hashtable<k,V>.
+ eg  Hashtable<Integer,String> students = 
+              new Hashtable<Integer,String>();
+   ....
+   as per previous example
+   .....
+
+Example: Represent countries and their unique state names.
+
+ HashMap<String,HashSet<String>> countries = new HashMap<String, HashSet<String>>();
+        countries.put("India",new HashSet<String>());
+        countries.put("Usa",new HashSet<String>());
+        countries.put("Nepal",new HashSet<String>());
+
+        countries.get("India").add("Gujarat");
+        countries.get("India").add("Raj");
+        countries.get("Nepal").add("Kath");
+        countries.get("Usa").add("Geor");
+        countries.get("Usa").add("Och");
+
+        for(String countryName : countries.keySet()) {
+            System.out.println(countryName);
+            for(String stateName: countries.get(countryName)) {
+                System.out.println("\t\t" + stateName);
+            }
+        }
+Example: Represent country wise states and state wise cities
+ HashMap<String,HashMap<String,HashSet<String>>> countries;
+ countries = new HashMap<String,HashMap<String,HashSet<String>>>();
+   
+java.util.Properties - A specialized Map
+---------------------------------------------------------------------------
+Java platforms uses this class to represent key-value pair of "string" objects
+to represent settings (environment & app settings).
+
+[Note: Properties object can be serialized (saved) into disk file and also deserialized (restore an object from file). In general, .properties is the most commonly used extension of properties data].
+
+We have put(k,v), get(k), setProperty(k,v) and  getProperty(k) methods in Properties object.
+
+Example: Read JavaEE environment entries
+
+        Properties sysProps = System.getProperties();
+        for(Object key: sysProps.keySet()) {
+            System.out.println(key + " : " + sysProps.get(key));
+        }
+        //Read a property separately
+        System.out.println(System.getProperty("user.home"));
+
+Example: Create your properties collection
+         Properties props = new Properties();
+         props.put("server","129.2.3.4");
+         props.put("user.name","abc");
+         props.setProperty("user.pass","abc,1234");
+    
+         System.out.println( props.get("server"));
+         System.out.println( props.getProperty("user.pass"));
+
+         //Now, serialize the Properties object - Always use following code 
+         //technique to dispose memory-hungry resources (objects) gracefully.
+
+        FileOutputStream fout = null;
+        try{
+            fout = new FileOutputStream("d:\\javaprg\\info.properties");
+            props.store(fout,"My app settings");
+        }catch(Exception ex) {
+            System.out.println(ex);
+        } finally {
+           if(fout!=null) {
+             try{ fout.close(); }catch(Exception ex) { /* */ }
+           }
+        }
+Example: To load info.properties file
+
+        FileInputStream fin = null;
+        Properties props=new Properties();
+        try{
+            fin=new FileInputStream("d:\\javaprg\\info.properties");
+            props.load(fin);
+            System.out.println( props.get("server"));
+            System.out.println( props.get("user.name"));
+            System.out.println( props.getProperty("user.pass"));
+        }catch (Exception ex){
+            System.out.println(ex);
+        } finally {
+            if(fin!=null) {
+                try{ fin.close();}catch(Exception ex) {}
+             }
+         }

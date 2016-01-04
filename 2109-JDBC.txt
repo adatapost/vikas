@@ -1,0 +1,458 @@
+ JDBC - Java Database Connectivity APIs.
+ ------------------------------------------------------------------------------
+ It is a database integration library through which we can use different database
+ products (MySql, MSSQL, Oracle, DB2, MS-Access and many more) via Java program.
+
+ The two packages namely - java.sql and javax.sql represent the JDBC APIs. 
+
+ JDBC, in fact, a protocol to connect to any relational database so we don't have
+ any specific class library or APIs for different databases in Java SE or EE.
+ Different database vendors (like oracle, microsoft, IBM etc) creates a software
+ by implementing JDBC's interfaces in order to integrate their product to Java  platforms.
+
+ So, Java's java.sql package contains set of interfaces and very few classes and it is
+ not sufficient for us to use them alone. Here we need a software which is created
+ by the vendors by implementing java.sql interfaces.
+
+ That vendor's designed software had implemented all of the interfaces defined in   java.sql & javax.sql packages and it is commonly refered as "JDBC Driver" tool or  API.
+
+ JDBC Drivers
+ -------------
+
+ Different database vendors develop JDBC Drivers using one of the following four  approaches and each approach is known as "Type" or "Driver Type".
+
+ Type1	-	It uses another integration APIs to perform database operations.
+		For example,
+                ODBC is another API written in C/C++ language and is used by the JDBC.
+                (ODBC stands for Open Database Connectivity and it is only available
+		 on windows operating system.)
+                It is less portable because it is written in C/C++.
+
+ Type2	-	It is created using C++ and partially Java code. There are some 		portability issues with Type2.
+ Type3	-	It is created using pure Java code and uses database-specific 		protocols.
+ Type4	-	It is pure Java driver and uses "network" protocol instead of database
+ 		specific protocols.
+          
+ Note: Type3 and Type4 are most popular drivers because they are highly portable and
+	are pure Java.
+
+ MySql JDBC Driver 
+ -----------------
+ In order to use MySql via Java program, we must first obtain the JDBC type3/4 driver by downloading from mysql.com.
+
+ Extract the downloaded zip, copy .jar (mysql-jdbc-xxxxxxxx.jar) into your project  folder or add it to your CLASSPATH (-cp). [We will rename the long name .jar file to  mysql.jar to avoid name/spell mistake while using with classpath]
+
+Example:
+
+-----/project
+             mysql.jar
+             Test.java
+
+Example:
+
+package in.ts;
+
+import java.sql.DriverManager;
+import java.sql.Connection;
+
+public class Test {
+
+  public static void main(String []args) {
+     String oracle = "oracle.jdbc.OracleDriver";  
+     String mysql = "com.mysql.jdbc.Driver";
+
+    try{
+      Class.forName(mysql);
+     // new com.mysql.jdbc.Driver();
+      System.out.println("Driver loaded successfully.");
+    }catch(Exception ex) {
+      System.out.println("Driver failed :" + ex);
+      System.exit(0); // Terminate JVM
+    }
+    
+    Connection cn = null;
+    try{
+      cn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tushar_db","root","");
+       System.out.println("Success");
+    }catch(Exception ex) {
+       System.out.println(ex);
+    } finally {
+       if(cn!=null) {
+         try{cn.close();}catch(Exception ex) { /* */ }
+       }
+    }
+
+  }
+
+}
+
+MySql url pattern :   jdbc:mysql://localhost:3006/your_dbname
+
+
+
+The java.sql.Connection interface
+-------------------------------------------------------------------------------
+It represents connection object reference which is returned by the DriverManager.getConnection() method.
+
+Methods
+-------
+1. close() -- To dispose the connection object. JDBC resources are memory hungry and
+		they must be released or disposed once their tasks are finished.
+
+               You can use try..catch..finally (as per our example) or try-with-	       resource syntax.
+
+               Try-with-resource:
+  
+         try(Connection cn = DriverManager.getConnection(
+                "jdbc:mysql://localhost/db_name","root","")) {
+            System.out.println("Success.");
+         }catch(Exception ex) {
+           System.out.println("Error while connecting : " + ex);
+         }
+2. Statement createStatement() - Creates an object of java.sql.Statement
+3. PreparedStatement prepareStatement() - Creates an object of 						java.sql.PreparedStatement
+4. CallableStatement prepareCall() - Creates java.sql.CallableStatement object.
+
+
+The java.sql.Statement and sub-interfaces (PreparedStatement & CallableStatement).
+-------------------------------------------------------------------------------------
+The main job of "Statement" object is to execute SQL query or stored procedure or function and retrieve the results.
+
+The java.sql.Statement interface is further extends by java.sql.PreparedStatement and java.sql.CallableStatement.
+
+The Statement interface is mainly used to execute Data-Definition-Language SQL statements -- CREATE, ALTER, DROP etc. This object must not be used for DML (Data-Manupilation Language) statements -- SELECT, DELETE, INSERT, UPDATE etc.
+
+The PreparedStatement interface must be used for DML sql statements.
+The CallableStatement interface must be used to execute "stored proc or functions".
+
+Why we should not use "Statement" object to execute DML sql queries?
+-----------------------------------------------------------------------
+Because "Statement" object sends SQL query & data as a "plain text" to the server and this leads some major issues like:
+   1. SQL Injection
+   2. Handling of escape or special chars and
+   3. Data are converted to string before they reach to server and hence we cannot
+      store binary data (files, objects etc).
+
+
+Sql Injection : To insert/append the sql expression or statement to the existing sql statement in the code.
+
+Here is how to check whether the username is exists in database or not:
+
+   String username = "raj";
+   String sql = "select * from login where username='" + username + "'";
+               select * from login where username='raj'
+
+If username contains,
+
+   String username = "raj' or '1'='1";
+ String sql = "select * from login where username='" + username + "'";
+
+    select * from login where username='raj' or '1'='1' 
+
+ In this case, any username value can pass this test because of additional "or"  expression.
+
+If username contains,
+  String username = "raj';drop table login;'";
+  String sql = "select * from login where username='" + username + "'";
+
+ select * from login where username='raj';drop table login;''
+  
+ In this case, another sql statement will be executed.
+
+
+Escape backslash or special char
+---------------------------------
+  String username = "raj's home";
+  String sql = "select * from login where username='" + username + "'";
+    
+  in this case, your program shows error - incorrect syntax.
+
+     select * from login where username='raj's home';
+
+
+Example: execute sql statements using "Statement" object.
+
+import java.sql.*;
+
+class Test {
+  public static void main(String []args) {
+     //Step-1 Load JDBC Driver
+     try{
+        Class.forName("com.mysql.jdbc.Driver");
+     }catch(Exception ex) {
+        System.out.println(ex);
+        System.exit(0);
+     }
+
+     //Step-2
+     try(Connection cn = DriverManager.getConnection(
+           "jdbc:mysql://localhost/tushar_db","root","")) {
+         
+           int dept_id = 10;
+           String dept_name = "HR";
+           String dept_loc = "Meh";
+
+           String sql = "insert into dept values (" + dept_id + ",'" 
+                                     + dept_name + "','" + dept_loc + "')";
+
+           try(Statement st = cn.createStatement()) {
+              st.executeUpdate(sql);
+           }
+
+      }catch(Exception ex) {
+         System.out.println("Error while executing... " + ex);
+     }
+   }
+}
+
+Example:
+
+package in.ts;
+import java.sql.*;
+
+class Test {
+  public static void main(String []args) {
+     //Step-1 Load JDBC Driver
+     try{
+        Class.forName("com.mysql.jdbc.Driver");
+     }catch(Exception ex) {
+        System.out.println(ex);
+        System.exit(0);
+     }
+
+     //Step-2
+     try(Connection cn = DriverManager.getConnection(
+           "jdbc:mysql://localhost/tushar_db","root","")) {
+         
+           int dept_id = 20;
+           String dept_name = "Finance";
+           String dept_loc = "Meh";
+
+           String sql = "insert into dept values (" + dept_id + ",'" 
+                                     + dept_name + "','" + dept_loc + "')";
+
+           try(Statement st = cn.createStatement()) {
+              st.executeUpdate(sql);
+           }
+
+      }catch(Exception ex) {
+         System.out.println("Error while executing... " + ex);
+     }
+   }
+}
+
+PreparedStatement object
+--------------------------
+The meaning of the term "Prepared" is "pre-compiled". This object first compiles (verify syntax) the sql statement and then sends "pre-compiled" query and data to the database server separately.
+
+This object uses question mark character (?) to define a query parameter.
+e.g
+   String sql = "insert into dept values (?,?,?)";
+
+      The first ? in query belogs to dept_id (1st column)
+      the second is for dept_name and third for dept_location.
+
+ The "PreparedStatement" object uses following methods to replace parameter value:
+
+     setInt(1, value);  // for 1st parameter
+     setString(2, value); //2nd param
+     setString(3, value); //3rd param
+     
+ There are other setXXXXXX(paramIndex, value) to send different kind of value to the database server. e.g setObject(), setArray(), setBytes(), setInputStrea() etc.
+
+
+package in.ts;
+import java.sql.*;
+
+class Test {
+  public static void main(String []args) {
+     //Step-1 Load JDBC Driver
+     try{
+        Class.forName("com.mysql.jdbc.Driver");
+     }catch(Exception ex) {
+        System.out.println(ex);
+        System.exit(0);
+     }
+
+     //Step-2
+     try(Connection cn = DriverManager.getConnection(
+           "jdbc:mysql://localhost/tushar_db","root","")) {
+         
+           int dept_id = 20;
+           String dept_name = "Finance";
+           String dept_loc = "Meh";
+
+           String sql = "insert into dept values (?,?,?)";
+
+           try(PreparedStatement st = cn.prepareStatement(sql)) {
+              st.setInt(1,dept_id);
+              st.setString(2,dept_name);
+              st.setString(3,dept_loc);
+              st.executeUpdate();
+
+              st.setInt(1,10);
+              st.setString(2,"H'R");
+              st.setString(3,"Patan");
+              st.executeUpdate();
+           }
+
+      }catch(Exception ex) {
+         System.out.println("Error while executing... " + ex);
+     }
+   }
+}
+
+
+Example:
+
+......
+......
+          String sql = "insert into dept values (?,?,?)";
+
+           try(PreparedStatement st = cn.prepareStatement(sql)) {
+              st.setInt(1,dept_id);
+              st.setString(2,dept_name);
+              st.setString(3,dept_loc);
+              st.executeUpdate();
+
+              st.setInt(1,10);
+              st.setString(2,"H'R");
+              st.setString(3,"Patan");
+              st.executeUpdate();
+           }
+......
+......
+
+
+Example:
+
+package in.ts;
+
+
+import java.sql.*;
+
+public class TestJdbc {
+
+  public static void main(String []args) {
+  
+   try{
+     Class.forName("com.mysql.jdbc.Driver");
+   }catch(Exception ex) {
+     System.out.println("Error while registering driver...: " + ex);
+     System.exit(0);
+   }
+
+   String url = "jdbc:mysql://localhost/tushar_db";
+   try(Connection cn=DriverManager.getConnection(url,"root","")){
+
+     // String sql = "update dept set dept_name=?, dept_location=? where dept_id=?";
+    String sql = "delete from dept where dept_id=?";
+      try(PreparedStatement ps = cn.prepareStatement( sql )){
+         // ps.setString(1,"Human Resources");
+         // ps.setString(2,"Mumbai");
+         // ps.setInt(3,10);
+         ps.setInt(1,10);
+          ps.executeUpdate();
+          System.out.println("Success");
+      }
+
+   }catch(Exception ex) {
+       System.out.println("Error while connecting database.." + ex);
+   }
+  }
+}
+
+
+Methods of PreparedStatement
+=====================================================================
+1. close() - Dispose the statement object
+2. int executeUpdate() - It executes non-queries SQL statement (Other than SELECT)
+   and returns count of affected rows.
+
+3. ResultSet executeQuery() - It executes the SELECT or query SQL statement and
+   returns an object of java.sql.ResultSet which contains a database cursor.
+
+Important: Call "executeUpdate()" for insert, delete, update statements whereas call the "executeQuery()" for select statement.
+
+The java.sql.ResultSet interface and its methods
+--------------------------------------------------
+This object has a database cursor (or a pointer to the result) and that pointer/cursor is opened, data are feched and cursor is closed by calling following methods.
+
+1. boolean next() -- It opens a cursor, fetch a row from database and returns true
+                     if that row has data. It returns false otherwise.
+
+2. getMetaData() --- It returns cursor metadata that includes - number of columns in
+			a result, name of column, name of table and so on.
+
+3. XXXXX getXXXXXX(int column_ordinal)
+   XXXXX getXXXXXX(String column_name)
+
+       Where XXXXX is a datatype name.
+
+  e.g  int getInt("column_name")  or int getInteger(1);
+       getString(), getDate(), getDouble() and so on.
+
+   These methods returns a value from current row of given column number or column   name.
+
+Example: Execute SELECT statement
+
+ //1. Register the driver (as per previous example)
+
+ //2. Establish connection and execute a query
+ String url = "jdbc:mysq://localhost/tushar_db";
+ try(Connection cn = DriverManager.getConnection(url,"root","")) {
+   
+    String sql = "select * from dept";
+    try(PreparedStatement ps = cn.prepareStatement(sql)) {
+
+       try(ResultSet rs = ps.executeQuery()) {
+           while( rs.next() ) {
+             System.out.println(rs.getInt(1) + " " 
+                 + rs.getString("dept_name") + " " + rs.getString("dept_location"));
+           }
+        }//end resultset
+
+    }//end prepared
+ 
+  }catch(Exception ex) {
+    System.out.println(ex);
+  }
+
+OR - without try-with-resource syntax
+-----------------------------------------
+
+//2. 
+ Connection cn = null;
+ PreparedStatement ps = null;
+ ResultSet rs = null;
+
+ String url = "jdbc:mysql://localhost/tushar_db";
+ 
+ try {
+
+   cn = DriverManager.getConnection(url,"root","");
+   ps = cn.prepareStatement("select * from dept");
+   rs = ps.executeQuery();
+   while( rs.next() ) {
+     System.out.println(rs.getInt("dept_id") + " " 
+                      + rs.getString("dept_name") + " "+ rs.getString(3) );
+   }
+
+ }catch(Exception ex) {
+    System.out.println(ex);
+ }finally {
+    if(cn!=null) {
+         try{ cn.close(); }catch(Exception ex) { /* */ }
+    } 
+    if(ps!=null) {
+         try{ ps.close(); }catch(Exception ex) { /* */ }
+    } 
+    if(rs!=null) {
+         try{ rs.close(); }catch(Exception ex) { /* */ }
+    } 
+ }
+
+ 
+
+
+ 

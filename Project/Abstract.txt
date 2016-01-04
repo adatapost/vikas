@@ -1,0 +1,131 @@
+Date : Monday, 3nd August 2015
+=============================================================
+Title
+=====
+Mobile Automotive Technician
+
+PROBLEM SUMMARY
+=================
+Developing Android clients & Java Enterprise (Server) applications to help people especially those who faces auto / motor disfunctions and seeks assistance of motor mechanics badly and for those motor mechanics who wish to provide better solutions with competitive charges and of course to earn more & expand their businesses.
+
+Abstract
+========
+The main reason to develop an application which brings automotive servicing to home, work, jobsite, roadside or wherever your vehicle happens to be. This app is an gateway for all kind of Automotive  technicians and people who own automobile and faces issues with them. This app should include detailed information of all kind or types of Automotive  technicians, workshops, Automotive  shops, dealers, Govt offices and other services including towing vehicles. 
+
+A person can search Automotive  technicians or Automotive  shops around or near to his/her location and send request for services or register the appointment by describing issues vocally or filling issue forms. A person can asks or know the charges for different services of different technicians and compare them based upon the feedback of people who have got quality services from them.
+
+The app should offer appointment scheduling, problem diagnosis, estimating, repair, verification of repair, computer invoicing, and customer follow-up and many other things that we should include as we understand them.
+
+
+Description
+===========
+
+A customer is anybody with wheels and mechanic is anybody that get your baby back on the road.
+
+Everyone has experienced that grim sensation of rushing out to the vehicle to discover that it won't start, or being stuck in the supermarket parking lot or on the side of the highway. Not only have we lost our means of transportation, but we've got to deal with all the logistics of having the vehicle towed to a repair shop, then finding our way back home or to work. But if we're one of the lucky few who can deal with these problems and we like solving automotive mysteries, then we can save the day as a mobile mechanic. 
+
+Role of Automotive  technician
+
+In today's hectic, hurried world, Automotive  technicians can help their customers not only by fixing automotive ills, but also by allowing them to remain at home or the office while you work. The advantages to the mobile mechanic business are that--unlike most auto repair businesses--you don't need employees, and if you like being an automotive physician, this can be a satisfying, stimulating career. It's also gratifying--people are appreciative when you get their baby back on the road, and doing it on their turf makes you even more of a miracle-worker.
+
+You'll need expertise and experience in the automotive repair industry--your customers will need as quick a fix as possible, so you won't be able to spend hours tinkering under the hood, hoping to hit on the solution. A strong analytical sense is also important; you'll need to be able to decide who needs you first, second and then on down the line.
+
+With the rapid advancement in technology, the mechanic's job has evolved from purely mechanical, to include electronic and computer technologies. Because vehicles today possess complex computer and electronic systems, mechanics need to have a broader base of knowledge than in the past.
+
+The detailed study of "Role of Automotive  Technician" and how they can offer better services to the customers and these services should be good, reliable, effective, immediate and cost effective. What we are planning here to develop such a mobile application and an enterprise app to help out customers, workshops and technicians.
+
+What we've planned based upon the overall data & information we acquired from different people from differnt scopes.
+ 
+Enterprize Modules - These modules acts as backing storage of enomorous amount of data and APIs which will be exposed or consumed by the client applications. These modules don't have graphics user interface but they serve the purpose of "Repository". We will use Java EE WebApp and RESTFul web-services to define the contract with clients (APIs) and MySql Database product.
+
+There are number of Modules under Enterprise app:
+
+1. User Account Management Module - This module encapsulate all activities required to create authentication & authorization system, manage accounts of Automotive  technicians, customers, Automotive  dealers, shops and workshops owners.
+2. Technician Module - This include services offere by each registered technician, service charges and customer feedback and quality of their services.
+3. Automotive  shop module - This include detailed and upto date  data or information of spare-parts. 
+4. Workshop Module - This include workshop services, seminars regarding to their services, best practices - guideline, appointment , Preventative maintenance and so on.
+5. Customer Module - This include searching technicians, shops, workshops, compare service charges & quality of their serivces, register the problems or an appointment, purchase the spare-parts and feedback.
+6. Administrative Module - The include overall management of pre-loads, customers, mechanics, workshops, and Automotive  shops.
+
+On develpment machine, we should have following minimum requirements.
+Software Requirements
+1. Operating System  - Windows 7 (Sp1) or Windows 8.1
+2. Platforms
+    1 Java SE
+      1 Language : Java
+      2 APIs     : Core APIs
+    2 Java EE 
+      1 Application Server : Apache Tomcat/Glassfish
+      2 APIs     : Web & Jersy RESTFul
+    3 Android & Emulators (SmartPhones & Tablets)
+3 IDE & Tools       : Eclipse, Netbeans or Android Studio
+4.Database - MySql Server
+
+Hardware Requirements
+Processor : Intel Processor - i3 or higher
+RAM       : 4 GB RAM (Minimum)
+Diskspace : 100 GB
+Device    : Android powered smartphone
+
+
+==========
+AVD Infotech
+
+AVD Infotech, is sister concern firm of A DATAPOST COMPUTER CENTRE, was established in 1998. It offers industry standard expertise in all areas of custom software development, consultancy, and systems integration.
+
+Our company has a substantial client base, which is serviced through our office in Mehsana (North Gujarat - INDIA). At "AVD Infotech" we are committed to providing you with a "single source solution" for your business requirement and software solutions needs.
+
+In fact, core development is our strong base and that might be a true reason why we are here? 
+
+Our firm ethos is built around two key drivers:
+
+1.	Cost - Our offerings are developed around our customers to provide solutions that offer real value for money and maximize their return on their investment.
+2.	Quality - We offer a set of services & products that are second to none and we are committed to staying ahead of technology trends through partnering with major manufacturers and ongoing training.
+
+
+ 
+PROFILE:  EXTERNAL PROJECT GUIDE
+
+NAME			: MR. K. V. PRAJAPATI
+DESIGNATION		: Sr. Software Developer
+CONTACT			: 98255 85300
+EMAIL			: avdinfotech@gmail.com
+FIRM ADDRESS		: 36, 3rd Floor, M.G. Shopping Center
+  			 Raj Mahel Road – Mehsana
+  			 Phone: (2762) 297329 
+   			 Mobile: 9825585300
+   			 Email: avdinfotech@gmail.com 
+				adatapost@gmail.com 
+                      URL :   http://www.avd.adatapost.com 
+
+
+
+Date : 29-06-2015 ( adatapost@gmail.com )
+============================================
+ 1. Motor/Vehicle Mechanics Apps  ( 6 Months )
+
+   This apps which is backed by an enterprize Web App helps people to
+   find mechnics, request Emergency services, Keep track on their       vehicles and also purchase spare-parts.
+
+     1. Easy registration for both Mechanics and Customers/Clients
+          
+     2. Update user profile, location, address details
+
+     3. Create vehicle portfolio (for Customers only)
+
+     4. Emergency services
+
+     5. Track your vehicle
+
+     6. Find / search mechanics
+
+     7. Payment 
+
+     8. Enterprize Web API & Web app (RESTFUL WEB Services)
+          ( Tomcat/Glassfish server, Java EE Web & Jersey RestFul API             + MySql Database)
+
+     9. Search Auto parts shops
+
+    10. 
+
+

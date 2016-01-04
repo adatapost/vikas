@@ -1,0 +1,42 @@
+As per Normalization rules, define the relations (tables) of following "raw" data
+=================================================
+
+ Invoice No: 10	
+ Invoice Date: 10-10-2015
+
+
+ Customer : Mr.A
+ Address  : XXXXXXXX
+
+ Name      Unit   Qty    Rate   Discout   Amount
+=====================================================
+ Roto	  Pack    1      100     0.00      100.00
+ Max      Nog     10       5     0.00       50.00 
+
+======================================================
+                                            150.00
+
+Step-1  Collect/list the raw item field
+
+InvoiceNo
+InvoiceDate
+CustomerName
+CustomerAddress
+ProductName
+Unit
+Qty
+Rate
+Discount
+Amount
+TotalAmount
+
+
+1  10-10-2015  Mr.A XXXX Roto Pack 1 100 0.00 100.00
+1  10-10-2015  Mr.A XXXX MAx  Nog  5   5 0.00  50.00
+1  10-10-2015  Mr.A XXXX MAx  Nog  5   5 0.00  50.00
+1  10-10-2015  Mr.A XXXX MAx  Kg  5   5 0.00  50.00
+1  10-10-2015  Mr.A XXXX MAx  Nog  5   5 0.00  50.00
+
+
+Normlization rules     1stNF, 2ND, 3NF or BCNF, Projection/4NF
+----------------------

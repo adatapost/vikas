@@ -1,0 +1,44 @@
+ How to dispose the "AutoCloseable" objects gracefully?
+ -------------------------------------------------------
+ Device IO, JDBC, and Network objects are memory-hungry - they uses huge amount of
+ memory and we must take care to release/dispose them once their operations are done.
+
+ If these resources are not disposed properly then your app might a victim of "Memory  Leak" - resources will not be freed unitil you restart your machine and also the  unused objects can be used by other objects & programs will causes "undefined  behavior".
+
+ Two ways to write code to dispose objects:
+ 1. Traditional method
+    
+     AutoCloseableClassObject var = null;
+     try {
+        //statements 
+     }catch(Exception ex) {
+        //message
+     }finally {
+        if(var!=null) {
+            try{
+               var.close();
+            }catch(Exception ex) { 
+            }
+         }
+      }
+ 2. try-with-resource syntax (Introduced in Java SE 7)
+    try(AutoCloseableClassObject var = ....) {
+       //statements
+    }
+
+    At the very end of try-with-resource statement, the JVM calls "close()" method
+    automatically.
+
+ Example:
+
+   try(FileInputStream fin = new FileInputStream("d:\\javaprg\\info.properties")) {
+      props.load(fin);
+      S.o.p( props.get("user.name") );
+   }catch(Exception ex) {
+      S.o.p(ex);
+   }
+
+Note: Set "Language Level" in IntelliJ => File + Project Structure + Change language level 7 or higher to use try-with-resource syntax.
+
+
+ 

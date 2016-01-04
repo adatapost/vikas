@@ -1,0 +1,140 @@
+  JSP   - Java Server Pages
+  ===== 
+
+  It is a "specialized" servlet - deployed automatically by the "container" to
+  provide "template-based" code generation.
+
+  Actually, we've two ways to generate code or output in JavaEE Web App:
+     1. via Servlet and let specify the servlet to produce varities of
+         output that includes -- XML, JSON, HTML, XML, Images (binary) etc.
+
+     2. via JSP (Which extends the Servlet) to produce dynamic content of
+         HTML/CSS/JavaScript.
+
+ Components of JSP
+ -----------------
+    A JSP page might includes:
+
+         1. Plain text
+         2. HTML tags, CSS properties and JavaScript code
+         3. Direct Java code via scriptlets, expressions and declarations
+         4. Indirect Java code via JSTL & EL
+              JSTL - Java Server Page Standard Tag Library
+              EL   - Expression Language
+ 
+
+  Java Web Application Folder structure
+  =======================================
+
+   A JavaEE web app must uses following "folder" structure:
+
+      |---------- This is known as 'context' or root of your application (/)
+      V
+   /YourAppFolder/
+                 |
+                 |------/META-INF  -- This folder contains 'context' configuration &
+                 |                    resources (icons, images, etc)
+                 |                    This folder is 'protected' by the container
+		 |                    and it is not visible to the public 		 |		      users/clients.
+                 |
+                 |----/WEB-INF/   
+                 |            |
+                 |            |----/classes/
+                 |            |  
+                 |            |----/lib/
+                 |            |
+                 |            | web.xml &
+		 |              other config files
+                 |
+                 |             The WEB-INF folder is also 'protected' by the 
+                 |             container - so it is not visible to public users.
+                 |
+                 | other resources for public users             
+                 | (pages/files/images/folders)              
+                 | e.g 
+                 | index.jsp
+                 | login.jsp
+                 |
+                 |-------/images/ 
+
+  1. Files & Folders (names) are case-sensitive.
+
+  2. web.xml file - called "Deployment Descriptor" -- used to instruct the
+                    container about its services.
+
+			For example, we can use "connection pool (database)" in our
+			application if we'd configured.
+			
+			We can set startup order of "servlets" & "filters".
+
+			Set "session" timeout.
+
+  3. The very same application structure is used for both - Web Service & Web App with 	UI.
+  4. Classes which are created by ourself in our app must be created inside the      "/WEB-INF/classes" folder. (IDEs like netbeans, IntelliJ, Eclipse manage app structure
+  in their own way by creating "src" folder for /WEB-INF/classes and so on).
+
+  5. .jar - librairies files must be added into the /WEB-INF/lib folder.
+
+
+Installing Apache-Tomcat container (app server).
+======================================================
+The "apache-tomcat" is the world's smallest and most commonly used open source Java EE application server and we can use its services without installing/working the Netbeans. 
+
+NOTE : IDE's like eclipse, intelliJ requires a separate installation of application        servers.
+
+Steps to install/start/stop container and also create/deploy the JavaEE webapp.
+-----------------
+ 
+1. First of all download apache-tomcat installer from apache-tomcat.org (size : 9 MB)
+
+2. Install with admin previleges at your own (custom) folder. 
+     For example "d:\Tomcat8" or something like this.
+
+    Apache-tomcat server will be installed at 8084 port by default. However we can         change it during the installation.
+
+     At the time of installation, set "manager" user name & password.
+
+      Note: "manager" is the user has permission to install (deploy), uninstall     (undeploy) the app, start/stop server, start/stop app and many more.
+
+
+3. After installation, open the web-browser and type "http://localhost:8080" or
+   http://localhost:8084  (whatever you've set the port).
+
+   This will opens a "home" page of installed apache-tomcat.
+
+4. Now, to create our own webapp and deploy it into the container:
+ 
+    1. Goto to X:\Tomcat8.0\webapps folder
+    2. create a folder in it. e.g X:\Tomcat8.0\webapps\tushar
+
+        The "webapps" is called auto-deployer folder.
+    3. Add "index.jsp" page into "tushar" folder
+
+index.jsp
+---------
+<!doctype html>
+
+<%
+  String title  = "My App";
+  java.util.Date now = new java.util.Date();
+%>            
+<h1><%=title%><h1>
+<h4>Today <%=now%></h4>
+
+Select your lucky day :
+ <select>
+   <%
+     for(int i=1;i<=7;i++) {
+        out.print("<option>" + i + "</option>");
+      }
+   %>
+  </select>
+
+4. Request your application (or page)
+   http://localhost:8080/tushar
+Or
+   http://localhost:8080/tushar/the-name-of-your-page.ext     
+
+ 
+
+			

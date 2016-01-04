@@ -1,0 +1,208 @@
+ How to send or pass data through client program?
+ ========================================================
+
+  First of all define a doPost() inside the servlet and use a method called   "getParameter(name)" of HttpServletRequest object.
+
+  HttpServletRequest is a parameter of doPost or doGet method. The method "getParameter(name)" returns value of specified "key or name" if given key or name
+ exists. It returns null otherwise.
+
+ Step-1 Create a servlet with /first url
+
+@WebServlet("/first")
+public class FirstServlet extends HttpServlet {
+    @Override
+    protected void doPost(HttpServletRequest req, 
+                 HttpServletResponse resp) throws ServletException, IOException {
+        String no = req.getParameter("no");
+        String name = req.getParameter("name");
+        String info = no + " " + name + " received";
+        resp.getWriter().println(info);
+    }
+}
+  
+ Step-2 Deploy your webapp 
+
+ Step-3 Create "client" app and add following code in main() method:
+
+    URL url = new URL("http://localhost:8084/yourapp/first");
+    HttpURLConnection cn = (HttpURLConnection) url.openConnection();
+    
+    cn.setRequestMethod("POST");
+    cn.setDoInput(true);     // Enable to read data
+    cn.setDoOutput(true);    // Enable to send (write) data
+
+    //define your data
+    String data = "no=10&name=Tusha";  //name=value entry separated by & sign
+
+    //write your data to output stream
+
+     cn.getOutputStream().write( data.getBytes() ); // write bytes
+     cn.getOutputStream().flush(); // wait till all bytes are not sent
+
+     //Read the response - result produced by the /first servlet
+
+     StringBuilder sb = new StringBuilder();
+     try(BufferedReader reader = 
+                new BufferedReader(
+                        new InputStreamReader(cn.getInputStream()))) {
+            String line = null;
+            while( (line=reader.readLine()) !=null ) {
+                 sb.append(line);
+            }
+      }catch(Exception ex) {
+           System.out.println(ex);
+      }
+      System.out.println("Output : " + sb.toString());
+
+Example: Write a servlet which returns sum of two numbers received from client.
+
+ data from client:    
+ 
+           int no1=10,no2=30;
+           String data =  "no1=" + no1 + "&no2=" + no2;
+
+ doPost (at server)
+   
+           int no1 =  Integer.parseInt(req.getParameter("no1")); 
+           int no2 =  Integer.parseInt(req.getParameter("no2")); 
+           int no3 = no1 + no2;
+           resp.getWriter().println(String.valueOf(no3));
+
+
+Helper methods - To obtain URLConnection, read data and write data
+=========================================================================
+Create a class named "U.java" in your "clientapp" with appropriate package.
+
+public class U {
+
+    /* readString(InputStream in) 
+        - Returns a string data 
+          from given InputStream 
+    */
+    public static String readString(InputStream in) {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader
+                = new BufferedReader(
+                        new InputStreamReader(in))) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (Exception ex) {
+            System.out.println("Error while reading : " + ex);
+        }
+        return sb.toString();
+    }
+
+    /* writeString(OutputStrea,String) - Write string to the OutputStream object */
+    public static void writeString(OutputStream out, String data) {
+        try {
+            out.write(data.getBytes());
+            out.flush();
+        } catch (Exception ex) {
+            System.out.println("Error while writing : " + ex);
+        }
+    }
+
+    /* getHttp - Obtain an instance of HttpURLConnection */
+    public static HttpURLConnection getHttp(String urlString) {
+        try {
+            URL url = new URL(urlString);
+            HttpURLConnection cn = (HttpURLConnection) url.openConnection();
+            cn.setRequestMethod("POST");
+            cn.setDoInput(true);
+            cn.setDoOutput(true);
+            return cn;
+        } catch (Exception e) {
+            System.out.println("Error while reading URL : " + e);
+        }
+        return null;
+    }
+}//End of class
+
+And client code to request the resource in main() method is:
+
+      //1. Obtain URLConnection
+        HttpURLConnection cn = U.getHttp("http://localhost:8084/MyDbApp/first");
+
+        //2. define your data
+        int no1=10, no2=40;
+        String data =  String.format("no1=%d&no2=%d",no1,no2);
+                   // or "no1=" + no1 + "&no2=" + no2;  
+         //3. write data
+        U.writeString(cn.getOutputStream(), data);
+
+        //4. sRead the response - result produced by the /first servlet
+        String result = U.readString(cn.getInputStream());
+        System.out.println(result);
+
+
+Improve the "U.java" code by adding a constant "base URL" and a method "post()".
+
+public class U {
+
+    public static final String URL = "http://localhost:8084/MyDbApp";
+
+    /*
+     String result = post("/uri","name1=value1&name2=value2");
+     */
+    public static String post(String uri, String data) {
+        try {
+            HttpURLConnection cn = U.getHttp(U.URL + uri);
+            U.writeString(cn.getOutputStream(), data);
+            return U.readString(cn.getInputStream());
+        } catch (Exception e) {
+            System.err.println("Error while posting : " + e);
+        }
+        return "ERROR";
+    }
+   .......
+   .......
+}
+
+And now, our code in main will be :
+
+        String result = U.post("/first", "no1=10&no2=33");
+        System.out.println(result);
+
+
+Example: Assume that we've "dept" table. Write a servlet code to insert a new dept record. 
+
+create table dept 
+(
+   dept_id int primary key,
+   dept_name varchar(40) not null
+)
+ code in doPost:  (Configure Hibernet before writing this code)
+    int deptId = Integer.parseInt( req.getParameter("deptId") );
+    String deptName = req.getParameter("deptName");
+    Session sess = HbUtil.getSessionFactory().openSession();
+    Transaction trans = sess.beginTransaction();
+     String message = "";
+         try{
+             //add new dept record
+             Dept dept = new Dept();
+             dept.setDeptId(deptId);
+             dept.setDeptName(deptName); 
+             sess.save(dept);
+             trans.commit();   
+             message = "Success";
+          }catch(Exception ex){
+             trans.rollback();
+             System.out.println(ex);
+             message = "Fail";  
+          }
+      sess.close();
+      resp.getWriter().print(message);
+
+And client code:
+  
+     String result = U.post("/dept","deptId=10&deptName=Accounting");
+     System.out.println(result);
+
+ 
+
+
+  
+
+ 

@@ -1,0 +1,137 @@
+ Web Resources
+ =============
+ 
+ What is a "Resource"?
+
+     A "resource" can be a program or a file that contains static text or binary data.
+
+     For example,
+
+     http://192.168.1.2/myapp/index.jsp  is a URL which points the "index.jsp" and
+					 index.jsp is a program.
+
+     http://192.168.1.2/myapp/logo.jpg   URL points a static resource (an image file)
+
+
+     http://192.168.1.2/myapp/emp         This resource is a program and it might 
+					  a servlet or web-service component.
+
+     So we've two types web resources - Static & Dynamic (program) resources.
+
+ 
+   What about URL, URN and URI?
+
+       URL : Uniform Resource Locator --  http://www.google.com
+
+     URI : Uniform Resource Identifier -- http://www.google.com/app/file.or.program
+
+      URN : Uniform Resource Name ---    /app/file.or.program
+
+
+ Example: Create a "servlet" which returns a text-message but this text-message
+          is different for "GET" and "POST" type of request.
+
+
+   POST, GET, PUT, DEBUG etc are HTTP verbs (or actions/methods of HTTP). In other    words POST, GET etc are also known as "Request Methods".
+
+
+   What is the purpose to use "GET" request method?
+
+        Ans: To read the resource.
+
+             This is the default request method of HTTP-clients (browser or your 		program etc)
+
+           The GET request method also send data but these data are in plain/text
+           format and should not be used for serious operations like - saving/updating
+	   or deleting or performing credit or login actions.
+
+  When to choose POST request method?
+
+         Ans: To send huge amount of data (However these data are in plain/text - 
+               We need to use HTTPS (Secured) protocol instead of HTTP to secure
+               the communication).
+
+               To perform serious / important tasks and that task requires some sort                of  data or confirmation flags.
+
+
+  Step-1 Create a WebApplication project (using Netbeans)
+
+  Step-2 Right mouse click on "Project" + Add New item + Select "Servlet" template
+
+          Set package : in.abc.servlets;
+          Set Servlet class : FirstServlet
+          Servlet url : /message
+
+
+@WebServlet("/message")
+public class FirstServlet extends HttpServlet {
+
+    @Override
+    protected void doPost(HttpServletRequest req, 
+            HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().println("This is POST request message.");
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req,
+            HttpServletResponse resp) throws ServletException, IOException {
+        resp.getWriter().println("This is GET request message.");
+    }
+}
+
+
+ Step-3  Create "index.jsp" and write following code: (at /  root of the app)
+
+      <form method="get" action="message">
+          <button>GET Request</button>
+      </form>
+
+      <form method="post" action="message">
+          <button>POST Request</button>
+      </form>
+
+           
+ Step-4 Press F6 to deploy (Right click on Project + Deploy)
+
+
+ Step-5 We can request the URL http://localhost:8084/WebApp1/message via
+        URL and URLConnection.
+
+        (It means we're going to create a HTTP-Client).
+
+      code in main:
+       
+          URL url = new URL("http://localhost:8084/WebApp1/message");
+          URLConnection cn = url.openConnection();
+          try(BufferedReader reader=
+                    new BufferedReader(
+                          new InputStreamReader(cn.getInputStream())) {
+              String line = null;
+              while( (line = reader.readLine()) !=null) {
+                    System.out.println(line);
+              }
+           }catch(Exception ex) {
+               System.out.println(ex);
+           }
+
+NOTE: Above program will use GET request method.
+
+Homework: Try to learn from java.net.URLConnection to request a resource using POST.
+                                   (Documentation of API)
+
+Example: Write a servlet which returns current system datetime of Server machine. Now, write a client which requests the servlet on every 2 seconds of interval.
+
+ [Note: override doGet() method only]
+
+
+
+             
+  
+ 
+ 
+
+
+
+
+
+

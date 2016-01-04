@@ -1,0 +1,191 @@
+ Model Layers - an abstraction
+ =============================================================================
+ Basically, hibernate models and hibernate APIs are used with underlying databases
+ and that kind of "classes or group of classes" are known as "DAO - Data Access  Object" layer.
+
+ DAO layer separate the database actions from the our server-side code or Java code  and this separation defines an abstraction.
+
+ Now, we need one level more abstraction or separation and that will separate
+ DAO code from its clients (Java Code or WebAPIs or Android). This new layer is known
+ as BAO - Business Access Object layer. (Some people refer them as BAL - Business  Access Layer or DAL - Data Access Layer).
+
+ Note that the term "Layer" defines logical or soft separation of code.
+
+ The term "tier" is used to define physical separation. For example, Android app,  Android OS, Database Server and JavaEE webapp are four "tier" or "four" software
+ which are installed & configure without affecting each other.
+
+Example: Create package-structure (Use the same structure of previous example)
+
+ in.dhruvi.hb.model
+ in.dhruvi.hb.util
+ in.dhruvi.util    
+
+ in.dhruvi.vm     -- It contains ViewModel classes - classes (POJOs) which are
+                     used by JavaEE or Android Apps
+                     [ "vm" stands for "View Model"]
+
+ Under the "in.dhruvi.vm" package, create following classes.
+
+ 1.  DeptViewModel.java
+
+public class DeptViewModel {
+   private int deptId;
+   private String deptName;
+   //constructors/getters/setters/toString, equals etc
+}
+
+2.  DeptRepository.java  - This class contains "static" methods.
+
+public class DeptRepository {
+  /* add new dept */
+  public static boolean add(DeptViewModel model) {
+     Session sess = HbUtil.getSessionFactory().openSession();
+     Transaction trans = sess.beginTransaction();
+     boolean status = false;
+     try {
+         Dept dept = new Dept();
+         dept.setDeptName( model.getDeptName() );
+         sess.save(dept);
+         trans.commit();
+         status = true;
+     }catch(Exception ex) {
+         trans.rollback();
+         System.out.println("Error while adding dept : " + ex);
+     }
+     sess.close();
+     return status;
+   }
+
+   /* Update dept */
+   public static boolean update(DeptViewModel model) {
+       Session sess = HbUtil.getSessionFactory().openSession();
+       Transaction trans = sess.beginTransaction();
+       boolean status = false;
+
+       try {
+         List<Dept> depts = sess.createCriteria(Dept.class)
+                                .add(Restrictions.eq("deptId",model.getDeptId())
+                                .list();
+         if(!depts.isEmpty()) {
+            Dept dept = depts.get(0);
+            dept.setDeptName( model.getDeptName() );
+            sess.update(dept);
+            trans.commit();
+            status = true;
+       }catch(Exception ex) {
+          trans.rollback();
+          System.out.println("Error while updating dept : " + ex);
+       }
+       sess.close();
+      return status;
+   }
+  /* Delete the dept */
+   public static boolean delete(DeptViewModel model) {
+       Session sess = HbUtil.getSessionFactory().openSession();
+       Transaction trans = sess.beginTransaction();
+       boolean status = false;
+
+       try {
+         List<Dept> depts = sess.createCriteria(Dept.class)
+                                .add(Restrictions.eq("deptId",model.getDeptId())
+                                .list();
+         if(!depts.isEmpty()) {
+            Dept dept = depts.get(0);
+            sess.delete(dept);
+            trans.commit();
+            status = true;
+       }catch(Exception ex) {
+          trans.rollback();
+          System.out.println("Error while deleting dept : " + ex);
+       }
+       sess.close();
+      return status;
+   }
+  /* Find by deptId */
+  public static DeptViewModel findById(DeptViewModel model) {
+       Session sess = HbUtil.getSessionFactory().openSession();
+       Transaction trans = sess.beginTransaction();
+       DeptViewModel search = null;
+       try {
+         List<Dept> depts = sess.createCriteria(Dept.class)
+                                .add(Restrictions.eq("deptId",model.getDeptId())
+                                .list();
+         if(!depts.isEmpty()) {
+            Dept dept = depts.get(0);
+            search = new DeptViewModel();
+            search.setDeptId( dept.getDeptId() ); 
+            search.setDeptName( dept.getDeptName() );
+         }
+       }catch(Exception ex) {
+          trans.rollback();
+          System.out.println("Error while searching dept by id : " + ex);
+       }
+       sess.close();
+      return search;
+   }
+  /* List all depts */
+  public static List<DeptViewModel> getDepts() {
+     List<DeptViewModel> list = new ArrayList<>();
+     Session sess = HbUtil.getSessionFactory().openSession();
+     Transaction trans = sess.beginTransaction();
+     try {
+         List<Dept> depts = sess.createCriteria(Dept.class).list();
+         for(Dept d: depts) {
+            DeptViewModel model = new DeptViewModel();
+            model.setDeptId( d.getDeptId());
+            model.setDeptName( d.getDeptName());
+            list.add(model);
+         }          
+       }catch(Exception ex) {
+          System.out.println("Error while preparing dept list : " + ex);
+       }
+       sess.close();
+      return list;
+  }
+
+  /* add extra methods if you have any? */
+  public static DeptViewModel findByName(DeptViewModel model) { /* code */ }
+}//end DeptRepository
+
+NOTE: No need to call trans.rollback() or trans.commit() while selecting record(s)
+
+
+Now, write down 'tests' and execute them. 
+
+public class HbApp {
+    public static void addTestMethod() {
+         DeptViewModel model = new DeptViewModel("Accounting");
+        if( DeptRepository.add(model)) {
+            System.out.println("Success");
+        } else {
+            System.out.println("Cannot add. Might be duplicate");
+        }
+    }
+    public static void updateTestMethod() {
+         System.out.println(DeptRepository.update(new DeptViewModel(4, "ACC")));
+    }
+    public static void deleteTestMethod() {
+         System.out.println(DeptRepository.delete(new DeptViewModel(4)));
+    }
+    public static void findByIdTestMethod() {
+         System.out.println(DeptRepository.findById(new DeptViewModel(1)));
+    }
+    public static void getDeptsTestMethod() {
+         for(DeptViewModel d: DeptRepository.getDepts()) {
+             System.out.println(d.getDeptId() + " " + d.getDeptName());
+         }
+    }
+    public static void main(String[] args) {
+        addTestMethod();
+        updateTestMethod();
+        deleteTestMethod();
+        findByIdTestMethod();
+        getDeptsTestMethod();
+    }
+}
+
+
+
+
+
+ 

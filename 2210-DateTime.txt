@@ -1,0 +1,99 @@
+ Working with Date & Time Java APIs
+ ============================================================================
+
+ In JDK1.0, java.util.Date class introduced to represent date & time but this class
+ has some "bad" design paradigm and hence some of these methods are depricated (out- of-service).
+
+ In JDK1.1, java.util.Calendar class was introduced to enhance the java.util.Date  related tasks. There are some classes under java.text package to format & parse
+ the date objects.
+
+
+ What makes "data" as a perfect "date" object?
+      A date object must represents - day,month,year, hour,minutes, seconds along with
+      Locale (Country's culture) and TimeZone. If anyone is missing from the date
+      then this date might represent false data.  
+
+    For example,
+
+                12-31-2015 15:12:23 UTC belongs to "US" locale and Universal Time
+						 Coordinates (Neutral TimeZone)
+                12-31-2015 15:12:23 IST belongs to "US" locale and Asia/Kolkatta
+						  TimeZone.
+
+Example-1  Current system's Date & Time
+
+     java.util.Date date = new java.util.Date();
+     System.out.println( date );
+
+
+Example-2 Java's uses EPOCH (Unix OS base date - 1-1-1970) date.
+
+        java.util.Date now = new java.util.Date(0);
+        System.out.println(now);
+
+Example-3 Read current date & time in millis
+
+       //1. Date#getTime()
+        java.util.Date now = new java.util.Date();
+        System.out.println(now.getTime());
+        
+        //2. System.currentTimeMillis()
+        System.out.println(System.currentTimeMillis());
+
+Example-4 Add or subtract some years,months, days, hours, minutes, seconds into / from
+          the date.
+
+        //subtract 10 days from current date
+        long ms = 1000L * 60L * 60L * 24L * 10L;
+        java.util.Date dt = new java.util.Date( System.currentTimeMillis() - ms);
+        System.out.println(dt);
+
+Example: compare date objects using after(), before() and equals() methods
+
+        //Note: import java.util.Date and write following code in main:
+
+         Date dt1 = new Date(); //current date
+         Date dt2 = new Date(System.currentTimeMillis() + 10000L);
+        if(dt1.after(dt2)) {
+               S.o.p("dt1 > dt2"); 
+        } else {
+               S.o.p("dt2 > dt1");
+        }
+ 
+Example: Format the date object - To format means to produce "string" data from given
+         date object.
+
+         We'll have to use "java.text.SimpleDateFormat" class and following 
+         date-format pattern characters. (See JavaDOC for pattern chars).
+
+     java.util.Date now = new java.util.Date();
+     java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("D w dd-MM-yy hh:mm:ss a");
+        System.out.println(sdf.format(now));
+ 
+
+Ex-1     
+ 
+       Date now = new Date();
+       S.o.p( new SimpleDateFormat("dd-MMM-yyyy").format(now) );
+
+        
+
+Example: String "date" to Date object is called Date-parsing.
+
+         String strDate = "31-12-2015";  
+         String strDatePattern = "dd-MM-yyyy";
+         Date dt = null;
+
+         SimpleDateFormat sfd = new SimpleDateFormat( strDatePattern );
+         try{ 
+            dt = sfd.parse( strDate );
+         }catch(Exception ex) {
+             System.out.println("Invalid date format. : " + ex);
+         }
+
+         System.out.println(dt); 
+
+
+
+
+          

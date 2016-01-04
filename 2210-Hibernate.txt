@@ -1,0 +1,186 @@
+ Example : Working with Date fields and also delete and update records.
+
+
+  Assume that we've following tables:
+
+   create table dept
+  (
+     dept_id int primary key auto_increment,
+     dept_name varchar(50) not null unique
+   )
+
+  create table emp
+   (
+     emp_id int primary key auto_increment,
+     emp_name varchar(100) not null,
+     join_date date,
+     dept_id int not null,
+     foreign key(dept_id) references dept(dept_id)
+     )
+ 
+ Presume that we've following packages:
+
+
+  in.dhruvi.hb.model   for hibernate POJO / beans / models / entities
+
+  in.dhruvi.hb.util    for "HbUtil.java" to obtain the SessionFactory object
+  
+  in.dhruvi.util       for DateHelper.java that contains helper methods of
+                       Date - parse & format object
+
+DateHelper.java 
+==================
+package in.dhruvi.util;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+public class DateHelper {
+
+    public static String toDateString(Date dt) {
+        return new SimpleDateFormat("dd-MM-yyyy").format(dt);
+    }
+
+    public static String toTimeString(Date dt) {
+        return new SimpleDateFormat("hh:mm:ss a").format(dt);
+    }
+
+    public static String toDateTimeString(Date dt) {
+        return new SimpleDateFormat("dd-MM-yyyy hh:mm:ss a").format(dt);
+    }
+
+    public static Date toDate(String str, String pattern) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.parse(str);
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public static Date toDate(String str) {
+         return toDate(str,"dd-MM-yyyy");
+    }
+     public static Date toISO(String str) {
+         return toDate(str,"yyyy-MM-dd");
+    }
+     public static Date now() { return new Date(); }
+}
+
+TEST the "DateHelper" methods (Code in main:)
+
+         Date dt  = DateHelper.now();
+         System.out.println(dt);
+         System.out.println(DateHelper.toDateString(dt));
+         System.out.println(DateHelper.toTimeString(dt));
+         System.out.println(DateHelper.toDateTimeString(dt));
+         dt = DateHelper.toDate("01-01-2002");
+         System.out.println(DateHelper.toDateString(dt));
+
+Example: Insert "Emp" record.
+
+      try {
+             Dept dept = new Dept();
+             dept.setDeptId(2);
+             Emp emp=new Emp();
+             emp.setDept(dept);
+             emp.setEmpName("Rahul R Patel");
+             emp.setJoinDate(DateHelper.toDate("21-01-2011"));
+             sess.save(emp);
+             trans.commit();
+        } catch (Exception ex) {
+            trans.rollback();
+            System.out.println("Error while adding new emp  : " +ex);
+        }
+
+Example: Search records
+
+         We will have to create "criteria" (conditions) using "Restrictions" object
+         of "criteria" method.
+
+
+ For example, search by "deptId" (as per POJO field name)
+
+   General Syntax:
+
+   List<T>   items = sess.createCriteria(PojoName.class)
+                         .add( Restrictions.eq("propertyName",value) )
+                         .add( Restrictions.le("propertyName",value) )
+                         ..... one or more restrictions/conditions will be
+                         place here.....
+                         .list();  
+
+             The last method in above "chain" must be "list() method".
+
+ 
+        try {
+            List<Dept> depts = sess.createCriteria(Dept.class)
+                     .add(Restrictions.eq("deptId", 11))
+                     .list();
+             if(!depts.isEmpty()) {
+                 Dept dept = depts.get(0);
+                 System.out.println(dept.getDeptId() + " " + dept.getDeptName());
+             } else {
+                 System.out.println("Not found");
+             }
+            ......
+        }.....
+
+Example: Update/change "deptName" of dept record whose "deptId" is 1.
+
+
+           List<Dept> depts = sess.createCriteria(Dept.class)
+                     .add(Restrictions.eq("deptId", 1))
+                     .list();
+             if(!depts.isEmpty()) {
+                 Dept dept = depts.get(0);
+                 dept.setDeptName("Human Resource");
+                 sess.update(dept);
+             } else {
+                 System.out.println("Not found");
+             }
+ 
+Example: Delete dept record whose deptId is 1.
+
+ [Note: Due to 'foreign key' constraints, a parent record cannot be deleted if it is
+        referenced by child table's row]
+
+
+          List<Dept> depts = sess.createCriteria(Dept.class)
+                    .add(Restrictions.eq("deptId", 1))
+                    .list();
+            if (!depts.isEmpty()) {
+                Dept dept = depts.get(0);
+                sess.delete(dept);
+            } else {
+                System.out.println("Not found");
+            }
+            trans.commit();
+            System.out.println("Record deleted successfully.");
+   
+Example: List all emps whose join date greater than or equals to 01-01-2011
+
+            Date dt = DateHelper.toDate("01-01-2011");
+            List<Emp> emps = sess.createCriteria(Emp.class)
+                    .add(Restrictions.ge("joinDate", dt))
+                    .list();
+            if(!emps.isEmpty()) {
+                for(Emp e: emps) {
+                    
+                    System.out.println(e.getEmpId() + " " + e.getEmpName() 
+                            + " " + DateHelper.toDateString(e.getJoinDate()));
+                }
+            }else {
+                System.out.println("No such emps exists");
+            }
+
+Example: List all emps whose joinDate exists between two given date
+
+            Date st = DateHelper.toDate("01-01-2011");
+            Date en = DateHelper.toDate("01-01-2015");
+            List<Emp> emps = sess.createCriteria(Emp.class)
+                    .add(Restrictions.between("joinDate", st, en))
+                    .list();
+            ........
+
+

@@ -1,0 +1,308 @@
+Database
+==============================================================
+Database is a container of "data" & "data-structures". Today we have number of
+database products - oracle sql server and MySql Sql server from Oracle Inc. 
+MSSQL from Microsoft, Db2 Sql Server from IBM and many more products from different vendors.
+
+All different database products are designed or developed using C/C++/Java programming environment with different architectures but they have a common language called "Structure Query Language - SQL". It is the "language" through which we can operate any of the database product via ad-hoc query (command or instructions).
+
+What is RDBMS? - It is a "relation" (two dimensional data representation or table) based data-structure where data are stored as two-dimensional.
+
+R-Ralation
+DBMS - Database Management System (Software which has ability to represent everything in form of "Relation"). The term "Relation" is also known as "Table". In other words, a RDBMS software is nothing but a "data-dictionary".
+
+Relation (Table)
+A "Relation" is made up of unique fields (columns) name, field datatype, length/size of data field and constraints (rules which validates user input).
+
+Following are most commonly used fields in different databases:
+
+1. int, float, number, decimal  - To represent numeric value
+2. varchar (variable length string) and char (fixed length string)
+3. nvarchar (variable length unicode string) and nchar(fixed length unicode string)
+4. date, datetime - To represent date & time 
+5. blob (binary large object), clob(character large object), varbinary, image - To
+   represent byte array.
+6. bit , bool - To represent boolean value
+
+Constraints (Rules)
+To validate the user input we need to add one or more constraints with "fields" and also "table".
+
+1. key or index    - To enhance the search based upon the "key" column
+2. unique          - To prevent duplicate data + it is "index" + it allows empty or 			null.
+3. primary key     - It won't allow null + It prevents duplicate data + It is "index"
+4. default value   - To set default value when that column is excluded in insert 			query.
+5. check condition - To set conditional constraints for the field
+6. foreign key     - To define "referential integrity" 
+7. not null or null - To prevent null or not
+Example:
+
+create table dept
+(
+   dept_id  int primary key,
+   dept_name varchar(50) not null unique,
+   dept_location varchar(30) not null
+)
+
+create table emp
+(
+   emp_id  int primary key,
+   emp_name varchar(100) not null,
+   join_date date not null,
+   gender varchar(8) default 'Female',
+   basic_salary decimal(18,2) not null,
+   dept_id int not null,
+   foreign key(dept_id) references dept(dept_id)
+)
+
+Note: 1. Each table must have a primark key. A table can have one and only one primary          key constraints. You can create a primary key of composite fields.
+	e.g
+		create table attendence 
+                 (
+                    emp_id int not null,
+                    att_date date not null,
+                    att_status varchar(1) default 'P',
+                    primary key(emp_id,att_date),
+                    foreign key(emp_id) references emp(emp_id)
+                    )
+
+SQL statements
+-----------------
+ insert into dept values (10,'Accounting','Mehsana');
+ insert into dept (dept_name,dept_id,dept_location)
+                          values ('HR',20,'Mehsana');
+
+ insert into emp values (1,'Raj','2002-10-20','Male',9000.45,10); // valid
+ insert into emp values (2,'Maj','2002-10-20','Male',9000.45,30); // Invalid - 				Referencetial integrity violated. dept_id 30 is not
+				exists in dept_id field of "dept" table.
+ insert into emp (emp_id,dept_id,emp_name,basic_salary)
+                 values (3,20,'Reena',6700.99);
+ insert into attendence (emp_id,att_date) values (1,'2015-08-24');
+ insert into attendence (emp_id,att_date) values (1,'2015-08-24'); //error primary key
+								     violated
+  insert into attendence (emp_id,att_date) values (2,'2015-08-24');
+ insert into attendence (emp_id,att_date,att_status) values (1,'2015-08-25','A');
+ insert into attendence (emp_id,att_date) values (4,'2015-08-24'); //Ref. integrity
+								    violated
+MySql Database Server via WAMP tool
+--------------------------------------------------
+First of all install the wamp tool (will be installed at c:\wamp) and start it (You can see system-tray icon with green color).
+
+Secondly, open the web-browser and type following url:
+
+   http://localhost/phpmyadmin
+
+This is web-user interface tool to operate MySql database.
+
+SQL Statements
+----------------
+
+1. change dept name whose id 2
+ 
+   update dept set dept_name='Human Resource',
+                   dept_location='Mumbai'
+                     where dept_id = 2
+
+2. Delete dept whose id is 4
+
+   delete from dept where dept_id = 4
+
+3. Show emp_id, emp_name, dept_name, dept_location, join_date and basic_salary
+
+   [Fetch rows from two or more tables -- is called "JOINS"]
+
+   
+select 
+  emp.emp_id,
+  emp.emp_name,
+  dept.dept_name,
+  dept.dept_location,
+  emp.join_date,
+  emp.basic_salary
+   from emp, dept
+      where emp.dept_id = dept.dept_id
+
+ OR
+ 
+select 
+  emp.emp_id,
+  emp.emp_name,
+  dept.dept_name,
+  dept.dept_location,
+  emp.join_date,
+  emp.basic_salary
+   from emp join dept <---- second table
+         ^    on dept.dept_id = emp.dept_id
+         |
+       first table
+
+  Fetch all rows from "first table" whose dept_id matches with "second table"
+
+4. show all rows from attendence, dept_name and emp_name
+
+select
+   attendence.*,
+   emp.emp_name,
+   dept.dept_name
+    from attendence
+          join emp on attendence.emp_id = emp.emp_id
+          join dept on emp.dept_id = dept.dept_id
+
+Example:
+
+create table country
+(
+  country_id int primary key auto_increment,
+  country_name varchar(40) not null unique
+)
+create table state
+(
+  state_id int primary key auto_increment,
+  state_name varchar(40) not null,
+  country_id int not null,
+  foreign key(country_id) references country(country_id)
+)
+create table city
+(
+  city_id int primary key auto_increment,
+  city_name varchar(40) not null,
+  state_id int not null,
+  foreign key(state_id) references state(state_id)
+)
+create table login
+(
+   user_id int primary key auto_increment,
+   user_email varchar(200) not null unique,
+   user_pass varchar(50) not null,
+   last_login datetime not null,
+   ac_created datetime not null,
+   user_type varchar(10) default 'Guest',
+   suspend bit default 0
+ )
+create table user_profile
+(
+   user_id int primary key,
+   first_name varchar(50) not null,
+   last_name varchar(50) not null,
+   address varchar(400) not null,
+   city_id int not null,
+   mobile varchar(15),
+   foreign key(user_id) references login(user_id),
+   foreign key(city_id) references city(city_id)
+)
+
+create table category 
+( 
+   category_id int primary key auto_increment,
+   category_name varchar(100) not null unique
+)
+create table product
+(
+   product_id int primary key auto_increment,
+   product_name varchar(300) not null,
+   product_desc varchar(300) not null,
+   product_unit varchar(30),
+   category_id int not null,
+   foregin key(category_id) references category(category_id)
+)
+create table mechanic
+(
+   user_id int primary key,
+   expertise varchar(900) not null,
+   workshop varchar(400) not null,
+   date_created datetime not null,
+   active bit default 1,
+   map_coordinates varchar(300),
+   charges varchar(100),
+   city_id int,
+   foregin key(user_id) references user_profile(login_id),
+   foreign key(city_id) references city(city_id)
+)
+create table mechanic_rating
+(
+    mechamic_user_id int,
+    customer_user_id  int,
+    rating int,
+    date_added datetime,
+    primary key(mechamic_user_id,customer_user_id),
+    foreign key(mechamic_user_id) references user_profile(user_id),
+    foreign key(customer_user_id) references user_profile(user_id)
+)
+create table product_vendor
+(
+    product_vendor_id int primary key auto_increment,
+    vendor_user_id   int,
+    product_id  int,
+    product_rate decimal(18,2),
+    update_date datetime,
+   foreign key(vendor_user_id) references user_profile(user_id),
+   foreign key(product_id) references product(product_id)
+)
+
+create table vendor
+(
+   user_id int primary key,
+   address varchar(400) not null,
+   date_created datetime not null,
+   active bit default 1,
+   map_coordinates varchar(300),
+   city_id int,
+   foreign key(user_id) references user_profile(login_id),
+   foreign key(city_id) references city(city_id)
+)
+
+create table invoice_service
+(
+   invoice_service_id int primary key auto_increment,
+   invoice_date datetime,
+   mechanic_user_id int,
+   customer_user_id int,
+   invoice_desc varchar(100),
+    foreign key(mechamic_user_id) references user_profile(user_id),
+    foreign key(customer_user_id) references user_profile(user_id)
+)
+create  table invoice_service_item
+(
+    item_id int primary key auto_increment,
+    invoice_service_id int,
+    item_description varchar(300),
+    item_charge decimal(18,2),
+    foreign key(invoice_service_id) references invoice_service(invoice_service_id)
+)
+    
+create table invoice_purchase
+(
+   invoice_purchase_id int primary key auto_increment,
+   invoice_date datetime,
+    vendor_user_id int,
+   customer_user_id int,
+   invoice_desc varchar(100),
+    foreign key(vendor_user_id) references user_profile(user_id),
+    foreign key(customer_user_id) references user_profile(user_id)
+)
+create  table invoice_purchase_item
+(
+    item_id int primary key auto_increment,
+    invoice_purchase_id int,
+    vendor_product_id int,
+    item_qty int,
+    item_rate decimal(18,2),
+    foreign key(invoice_purchase_id) references invoice_purchase(invoice_purchase_id),
+    foreign key(vendor_product_id) references vendor_product(vendor_product_id)
+)
+ 
+Create a word document with following structure for each table
+-----------------------------------------------------------------
+
+Table : Login
+Primary Key : user_id
+
+----------------------------------------------------------------------------------
+| SR. | FIELD       | TYPE       | SIZE   | CONSTRAINTS | DESCRIPTION
+|----------------------------------------------------------------------------------
+|  1. | user_id     | int        | 11     | primary key | unique record identifier
+|  2. | user_email  | varchar    | 200    | unique      | unique email address of
+							  registerd person
+| .....
+       
+
+

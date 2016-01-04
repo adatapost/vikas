@@ -1,0 +1,487 @@
+Example of inner classes
+====================================
+
+
+public class Country {
+    private String countryName;
+    private HashSet<State> states = new HashSet<>();
+
+    public State addState(String stateName) {
+        return new State(stateName);
+    }
+    public HashSet<State> getStates() { return states;}
+
+    public Country(String countryName) {
+        this.countryName = countryName;
+    }
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+    public class State {
+        private String stateName;
+        private HashSet<City> cities = new HashSet<>();
+
+        public State addCity( String cityName) {
+            new City(cityName);
+            return this;
+        }
+        public HashSet<City> getCities() { return cities;}
+
+        public State(String stateName) {
+            this.stateName = stateName;
+            states.add(this);
+        }
+        public String getStateName() {
+            return stateName;
+        }
+        public void setStateName(String stateName) {
+            this.stateName = stateName;
+        }
+
+
+        public class City {
+            private String cityName;
+
+            public City(String cityName) {
+                this.cityName = cityName;
+                cities.add(this);
+            }
+            public String getCityName() {
+                return cityName;
+            }
+
+            public void setCityName(String cityName) {
+                this.cityName = cityName;
+            }
+
+            @Override
+            public boolean equals(Object o) {
+                if (this == o) return true;
+                if (o == null || getClass() != o.getClass()) return false;
+
+                City city = (City) o;
+
+                if (!cityName.equals(city.cityName)) return false;
+
+                return true;
+            }
+
+            @Override
+            public int hashCode() {
+                return cityName.hashCode();
+            }
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+
+            State state = (State) o;
+
+            if (!stateName.equals(state.stateName)) return false;
+
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return stateName.hashCode();
+        }
+    }
+
+}
+
+
+public class Main {
+    public static void main(String[] args) {
+        Country ind=new Country("India");
+        Country.State g = ind.addState("Gujarat");
+        Country.State r = ind.addState("Rajesthan");
+
+        g.addCity("Mehsana");
+        g.addCity("Visnagar");
+        r.addCity("Jaipur");
+        r.addCity("Mola");
+        r.addCity("Jaipur");
+
+        r.addCity("A").addCity("B").addCity("C");
+        g.addCity("P").addCity("Q");
+        for(Country.State state : ind.getStates()) {
+            System.out.println(state.getStateName());
+            for(Country.State.City city: state.getCities()) {
+                System.out.println("\t"+city.getCityName());
+            }
+        }
+    }
+}
+
+
+Another Example
+----------------
+
+package in.tushar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class Country {
+    private int countryId;
+    private String countryName;
+    private ArrayList<State> states = new ArrayList<>();
+
+    public State addState(int stateId,String stateName) {
+        return new State(stateId,stateName);
+    }
+    public List<State> getStates() { return states;}
+
+    public Country(int countryId, String countryName) {
+        this.countryId = countryId;
+        this.countryName = countryName;
+    }
+
+    /***
+     * Getter /Setters
+     * @return
+     */
+
+    public int getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Country country = (Country) o;
+
+        if (countryId != country.countryId) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return countryId;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "countryId=" + countryId +
+                ", countryName='" + countryName + '\'' +
+                '}';
+    }
+
+    public class State {
+        private int stateId;
+        private String stateName;
+        private ArrayList<City> cities = new ArrayList<>();
+
+        public City addCity(int cityId, String cityName) {
+           return  new City(cityId,cityName);
+        }
+        public List<City> getCities() { return cities;}
+
+        public State(int stateId, String stateName) {
+            this.stateId = stateId;
+            this.stateName = stateName;
+            states.add(this);
+        }
+        //getters-setters
+        public int getStateId() {
+            return stateId;
+        }
+
+        public void setStateId(int stateId) {
+            this.stateId = stateId;
+        }
+
+        public String getStateName() {
+            return stateName;
+        }
+
+        public void setStateName(String stateName) {
+            this.stateName = stateName;
+        }
+
+        public class City {
+            private int cityId;
+            private String cityName;
+
+            public City(int cityId, String cityName) {
+                this.cityId = cityId;
+                this.cityName = cityName;
+                cities.add(this);
+            }
+
+            public int getCityId() {
+                return cityId;
+            }
+
+            public void setCityId(int cityId) {
+                this.cityId = cityId;
+            }
+
+            public String getCityName() {
+                return cityName;
+            }
+
+            public void setCityName(String cityName) {
+                this.cityName = cityName;
+            }
+        }
+    }
+
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Country ind = new Country(1,"India");
+        Country.State guj=ind.addState(1, "Gujarat");
+        Country.State mah=ind.addState(2, "Maharashtra");
+
+        guj.addCity(1,"Meh");
+        guj.addCity(2,"Vis");
+        mah.addCity(3,"Mum");
+        mah.addCity(4,"Pun");
+        guj.addCity(5,"Unjha");
+
+        for(Country.State state : ind.getStates()) {
+            System.out.println(state.getStateName());
+            for(Country.State.City city: state.getCities()) {
+                System.out.println("\t"+city.getCityName());
+            }
+        }
+    }
+}
+
+Another Example
+----------------
+
+package in.tushar;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by Prajapati on 9/14/2015.
+ */
+public class Country {
+    private int countryId;
+    private String countryName;
+    private ArrayList<State> states = new ArrayList<>();
+
+    public void addState(int stateId,String stateName) {
+        new State(stateId,stateName);
+    }
+
+    public List<State> getStates() { return states;}
+    public Country() {
+    }
+
+    public Country(int countryId, String countryName) {
+        this.countryId = countryId;
+        this.countryName = countryName;
+    }
+
+    public int getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(int countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Country country = (Country) o;
+
+        if (countryId != country.countryId) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return countryId;
+    }
+
+    @Override
+    public String toString() {
+        return "Country{" +
+                "countryId=" + countryId +
+                ", countryName='" + countryName + '\'' +
+                '}';
+    }
+
+    public class State {
+        private int stateId;
+        private String stateName;
+        private ArrayList<City> cities = new ArrayList<>();
+
+        public void addCity(int cityId, String cityName) {
+            new City(cityId,cityName);
+        }
+        public List<City> getCities() { return cities;}
+
+        public State() {
+        }
+
+        public State(int stateId, String stateName) {
+            this.stateId = stateId;
+            this.stateName = stateName;
+            states.add(this);
+        }
+
+        public int getStateId() {
+            return stateId;
+        }
+
+        public void setStateId(int stateId) {
+            this.stateId = stateId;
+        }
+
+        public String getStateName() {
+            return stateName;
+        }
+
+        public void setStateName(String stateName) {
+            this.stateName = stateName;
+        }
+
+        public class City {
+            private int cityId;
+            private String cityName;
+
+            public City() {
+            }
+
+            public City(int cityId, String cityName) {
+                this.cityId = cityId;
+                this.cityName = cityName;
+                cities.add(this);
+            }
+
+            public int getCityId() {
+                return cityId;
+            }
+
+            public void setCityId(int cityId) {
+                this.cityId = cityId;
+            }
+
+            public String getCityName() {
+                return cityName;
+            }
+
+            public void setCityName(String cityName) {
+                this.cityName = cityName;
+            }
+        }
+    }
+
+}
+public class Main {
+    public static void main(String[] args) {
+        Country ind = new Country(1,"India");
+        ind.addState(1, "Gujarat");
+        ind.addState(2,"Maharashtra");
+
+        Country.State guj = ind.getStates().get(0);
+        ind.getStates().get(0).addCity(1,"Meh");
+        ind.getStates().get(0).addCity(2,"Vis");
+        ind.getStates().get(1).addCity(3,"Mum");
+        ind.getStates().get(1).addCity(4,"Pun");
+        guj.addCity(5,"Unjha");
+
+        for(Country.State state : ind.getStates()) {
+            System.out.println(state.getStateName());
+            for(Country.State.City city: state.getCities()) {
+                System.out.println("\t"+city.getCityName());
+            }
+        }
+    }
+}
+
+class Person {
+   private Date birthDate;
+   ...
+   public void setBirthDate( Date birthDate ) { this.birthDate = birthDate; }
+}
+
+Person p = new Person();
+String str = "31-12-2001"; 
+
+try{
+  Date dt=new SimpleDateFormat("dd-MM-yyyy").parse(str);
+  p.setBirthDate(dt);
+}catch(Exception ex) { /* */ }
+
+
+OR
+
+Person p = new Person();
+String str = "2001-12-31";  //If format is ISO
+p.setBirthDate( Date.valueOf( str ) );
+
+Example:
+
+public class MyDate {
+  private Date dt;
+  public MyDate() { dt = new Date(); }
+  public MyDate(long millis) {
+       dt = new Date(millis);
+  }
+  public MyDate(String str) {
+     dt = convert(str,"dd-MM-yyyy");
+     if(dt!=null) return dt;
+     dt = convert(str,"MM-dd-yyyy");
+     if(dt!=null) return dt;
+     dt = convert(str,"yyyy-MM-dd");
+     if(dt!=null) return dt;  
+     return new Date(0);   
+  }
+  private static convert(String str,String pattern) {
+     Date d = null;
+     try{
+       d=new SimpleDateFormat(pattern).parse(str);
+     }catch(Exception ex) { }
+     return d;
+  }
+  public Date getDt() { return dt; }
+}
+
+Person p = new Person();
+p.setBirthDate( new MyDate("1992-1-1").getDt() );
+
+  

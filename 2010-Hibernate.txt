@@ -1,0 +1,239 @@
+ Hibernate - An ORM Tool
+ =================================================================================
+
+ What is an ORM? 
+
+  ORM stands for Object-Relation Mapping (Mapper). An "Object" is an ORM is a POJO -   Plain Object Java Object - a bean or model class having private fields,   constructors, and getters/setters.
+  The word "Relation" refers the database table. ORM is a software or tool which
+  defines a way to write/update POJOs into the database and also read database result
+  in the form of "POJO".
+
+ What is "Hibernate"?
+
+ It is an ORM. It is an open source project from RedHat Inc (also known as JBoss).
+ The "Hibernate" software comprises two important components:
+
+       1. Hibernate Engine and
+       2. Hibernate APIs & Tools
+
+ Hibernate automatically uses JDBC (java.sql) APIs and provide simple yet elegant
+ way to work with any relational database management system (RDBMS).
+ 
+ Why we should have to use ORM instead of plain JDBC or direct JDBC?
+ 
+ Direct use of JDBC is a native way to work with any RDBMS and it requires lots of
+ coding & great amount of care. e.g Disposing objects, Pervent Memory-leaks, Casting
+ (conversion) of database result etc.
+
+ No-SQL paradigm - No-SQL means we don't have to write any hard-coded SQL query. The
+ Hibernate Engine will prepare sql statements for us implicitly.
+
+ Lazy initialization paradigm - Hibernet reads datbase result when it is actually
+				needed by the develper/applications. That way
+				less memory or resources will be allocated to
+				hold database result.
+
+ Record dependencies  - Based upon the "primary" and "foreign" keys, the "Hibernate"
+                        uses "object-composition design" to set record dependencies.
+
+   For instance,   
+
+      create table dept 
+       (
+          dept_id int primary key,
+          dept_name varchar(40) not null
+         )
+
+       create table emp 
+       (
+          emp_id int primary key,
+          dept_id int,
+          emp_name varchar(50),
+          foreign key(dept_id) references dept(dept_id)
+         )
+
+ hibernate will uses following "object-composition design"
+
+    public class Dept {
+           private int deptId;
+           private String deptName;
+           private Set<Emp> emps;  <--------- A "dept" has zero or more "Emps"
+     }
+    public class Emp {
+            private int empId;
+            private int deptId;
+            private String empName;
+            private Dept dept;     <------  A "dept" belongs to each "Emp"
+    }  
+ 
+ JPA - Java Persistent API
+ ------------------------------
+ JPA is a JavaEE guideline (rulebook) for ORM vendors and almost all JavaEE ORMs
+ are designed according to JPA specification (Read more on JPA specification on  google).
+
+ Hibernate from RedHate, JDO - Java Data Object from Apache, JPA from eclipse.org,
+ JPA from glassfish - oracle, SQL-Template from spring and many more are example 
+ of JPA implementations.
+
+
+ Configure the hibernate to our app (Any kind of apps - windows, web, service or  console)
+  ==============================================================================
+  Hibernate "tools" exists with "Netbeans" or "Eclipse" IDE (Integrated Development
+  Environment) to config the hibernate to our app.
+
+  Hibernate system uses "XML" markup to persists configration or settings data.
+ 
+   Steps to configure hibernate with "Java Application" (Netbeans)
+   =================================================================
+
+   1. Start database and create "dept" and "emp" tables - via WAMP or any other ways.
+
+   2. Create "Java Application" project in netbeans.
+
+   3. Right mouse click on "Libraries" in project explorer + Add Library + Select   
+      "Mysql JDBC Driver" + Add
+
+      (Add JDBC .jar file to CLASSPATH of our app)
+
+   4. Right mouse click on "Source Packages" in project explorer
+       + New + Others + Hibernate + Select "Hibernate Configuration Wizard"
+       + Next + (Select /src folder and a file name will be hibernate.cfg )
+       + Next + Click on "New Database Connection (for the first time)" 
+       + (Assume that we've "emp_db" database) 
+       + Select driver - Mysql J-connector (any driver name begins with MySql)
+       + Next + Set Database = "emp_db" , username="root", password=  (empty) and
+         [x] Remember Password + Next (or click on Test Connection to see everything
+             is OK or not). + Next + Next + Finish 
+       + Finish (After driver & database configuration)
+
+       At this stage, a file named "hibernate.cfg" will be created under /src folder
+       that contains driver, username,password and database information.
+  5. Right mouse click on "Source packages"
+     + New + Others + Hibernate + Hibernate reverse engineering wizard 
+     + Next + a file named "hibernate.reveng.xml" will be created under /scr
+     + Next + a dialog window which contains "tables" and select appropriate "tables"
+       that we want them into our application - select "dept" and "emp" 
+     + Finish
+
+   6. New + Others + Hibernate + Hibernate Mapping Files and POJO from
+      database (This step will generate .java - POJO at given package name)
+      + Next +  [x] JDK 5 Language Features and
+                package name = in.tushar.model   (Use two or more level package name)
+
+      + Finish
+
+       At this stage  following files are created under given package folder:
+             Dept.java , Dept.hbm.xml  
+             Emp.java , Emp.hbm.xml  
+
+           .hbm stands for Hibernate mapping file.
+
+   7.   Add HibernateUtil - a java code file which returns an instance of         org.hibernate.SessionFactory.
+
+        New + Others + Hibernate + HibernateUtil Java + Set package name & class file
+         name . e.g  in.tushar.HbUtil.java
+
+         in HbUtil.java file, a static method named "getSessionFactory()" returns
+         a connection/session object - which is a primary task to work with
+         hibernate APIs.
+
+   8.  Use hibernate APIs to perform database tasks (insert/delete/select/update etc)
+
+        In our code, we have to import "org.hibernate" and "in.tushar.model" packages.
+
+Example: To add "dept" record -- In order to work with hibernate APIs, we must use
+                                 following pattern.
+
+import org.hibernate.*;
+import in.tushar.HbUtil;
+import in.tushar.model.*;
+
+public class Test {
+
+  public static void main(String []args) {
+
+        //1. Open a connection/session
+         Session sess = HbUtil.getSessionFactory().openSession();
+         
+         //2. Create Transaction object
+         
+         Transaction trans = sess.beginTransaction();
+         
+         //3. Perform any kind of database tasks
+         
+         try{
+             //add new dept record
+             Dept dept = new Dept();
+             dept.setDeptId(10);
+             dept.setDeptName("Human Resource"); 
+             sess.save(dept);
+             trans.commit();  //save changes
+         }catch(Exception ex){
+             trans.rollback();
+             System.out.println(ex);
+         }
+         
+         //4. Shutdown the connection/session
+        sess.close();
+  }
+}
+          
+
+Example:  Add new emp
+       
+          Emp emp  = new Emp();
+          emp.setEmpId(1);
+          emp.setEmpName("Mr.A");
+          Dept dept = new Dept();
+          dept.setDeptId(10);
+          emp.setDept(dept);
+  
+          sess.save(emp);
+          trans.commit();
+
+Example: List depts
+
+          List<Dept> depts = sess.createCriteria(Dept.class).list();
+          for(Dept dept: depts) {
+              S.o.p(dept.getDeptId() + " " + dept.getDeptName());
+          }
+
+Example: List emps
+
+          List<Emp> emps = sess.createCriteria(Emp.class).list();
+          for(Emp e: emps) {
+             S.o.p(e.getEmpId() +  " " + e.getEmpName() 
+                   + " " + e.getDept().getDeptName() 
+                   + " " + e.getDept().getDeptId());
+           }
+
+                       
+
+
+ 
+
+
+
+ 
+    
+ 
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+ 
+
+
+  

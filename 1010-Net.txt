@@ -1,0 +1,76 @@
+ java.net APIs
+ ===============================================
+ java.net.URL and java.net.URLConnection (HttpURLConnection) classes are used to
+ read the "URLs" and the "url-resources". We can also use these classes to  modify/update/delete url-resources if we have appropriate permission.
+
+
+ Example: Read the home page content of google.com
+ 
+     try {
+            URL url = new URL("https://www.google.com");
+            URLConnection cn = url.openConnection();
+         
+            try (BufferedReader reader
+                    = new BufferedReader(
+                            new InputStreamReader(
+                                    cn.getInputStream()))) {
+
+                                String line = null;
+                                while ((line = reader.readLine()) != null) {
+                                    System.out.println(line);
+                                }
+                            } catch (Exception ex) {
+                                System.out.println(ex);
+                            }
+        } catch (Exception ex) {
+              System.out.println(ex);
+        }
+Example: Download a web-resource. (Read it and copy it to local disk file) Always use InputStream instead of Reader when content type is non-text (binary).
+
+try {
+            URL url = new URL("https://github.com/adatapost/essential-javascript-links/archive/master.zip");
+            URLConnection cn = url.openConnection();
+
+            try (BufferedInputStream in
+                    = new BufferedInputStream(
+                            cn.getInputStream())) {
+
+                        try (BufferedOutputStream out
+                                = new BufferedOutputStream(
+                                        new FileOutputStream("d:/javaprg/tushar/javascript.zip"))) {
+
+                                    byte[] array = new byte[4096];
+                                    int reads = 0;
+                                    
+                                    while( (reads = in.read(array))!=-1 ){
+                                        out.write(array, 0, reads);
+                                    }
+                                }
+                    } catch (Exception ex) {
+                        System.out.println(ex);
+                    }
+        } catch (Exception ex) {
+             System.out.println(ex);
+        }
+
+Develop a crawler (web-site copier) - Assume that we have a site http://www.example.com and copy all resources referenced in the below document.
+
+<!doctype html>
+<html>
+  <head>
+     <link rel="stylesheet" href="css/style.css"/>
+     <script src="js/app.js"></script>
+  </head>
+  <body>
+     <h1>Site</h1>
+     <img src="images/sample.png"/>
+  </body>
+</html>
+
+1. Copy the home page 
+2. Create a list of all resources exists under "src" or "href" attribute of HTML elements.
+3. Read/download resources
+
+[NOTE: Use JSoup - an open source library to read & parse the web-documents and also download the resources]
+
+

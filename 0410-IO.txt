@@ -1,0 +1,432 @@
+ Device Input Output - java.io package
+ ============================================
+
+ Classes & interfaces of java.io package has number of I/O infrastructure for varying  of devices and that includes Disk, RAM, Network, Cipher, Zip and so on.
+ 
+
+ There are two major types/class of IO infrastructure APIs in java.io:
+
+    1. Byte-oriented IO and
+    2. Character-oriented IO 
+  Apart from byte & char oriented IO, java.io has "buffered APIs". The "buffered APIs"
+  is a mechanism to enhance the IO for both byte & char oriented IOs.
+
+   For example,
+
+
+     Non-Buffered IO: 
+  
+          | Your Program | =========> | Actual Device |
+          |              | <========= |               |
+
+     Buffered IO:
+
+   
+          | Your Program | ====  | Buffer Mechanism |=====> | Actual Device |
+          |              | <=====|                  |<====  |               |
+
+  Byte Oriented Types
+  =====================
+
+  Two abstract classes namely java.io.InputStream and java.io.OutputStream
+  define the byte-oriented behavior. All byte-oriented classes exists in 
+  java.io or other packages or other platforms (Android, JavaEE, ME) are
+  sub-classes of "InputStream" and "OutputStream" classes.
+
+  Example of Byte-oriented classes:
+           1. FileInputStream & FileOutputStream   (Disk)
+           2. ByteArrayInputStream & ByteArrayOutputStream (Ram)
+           3. java.net classes
+           4. javax.crypto classes
+           5. java.util.zip classes
+           
+   Character/Text Oriented Types
+   =================================
+   Two abstract classes namely - java.io.Reader and java.io.Writer define
+   char oriented behavior.
+
+    These classes are:
+      1. FileReader & FileWriter
+      2. CharArrayReader  & CharArrayWriter
+       and many other classes in diff packages 
+
+ [Note: byte oriented classes have "InputStream" or "OutputStream" suffix whereas
+        char oriented classes have "Reader" and "Writer" suffix.]
+
+    Buffered classes
+    =================================
+    BufferedXXXXXXX classes improve the IO so always use these classes. 
+
+     For byte oriented - BufferedInputStream & BufferedOutputStream
+     for char oriented : BufferedReader and BufferedWriter
+
+     BufferedInputStream always uses "InputStream" class object as a 
+     "backing storage device". And similarly the OutputStream.
+
+     BufferedReader & BufferedWriter uses "Reader or Writer" objects as
+     "backing storage device".
+
+     Under the "buffered APIs", we have two helper classes which 
+     transform "InputStream" to "Reader" and the "OutputStream" to "Writer".
+     These classes are:
+               1. InputStreamReader and 
+               2. OutputStreamWriter
+
+  How to dispose the IO resources/objects gracefully?
+  ------------------------------------------------------------------
+    To "dispose" the IO resources means to shutdown a device or to release
+    memory that is allocated for IO purpose.
+    IO operations are memory hungry and they uses huge amount of memory and 
+    also they uses operating system level (low-level) methods. If these 
+    resources are not handled properly then our application can be terminated
+    abruptly or causes more damage to the platform/OS.
+
+   In Java Platforms, "AutoCloseable" and "Closeable" interfaces introduce to
+   design those classes where memory-leaking (improper use of memory) might
+   hurt the environment.
+
+   [NOTE: JDBC APIs - java.sql classes also resource intensive and thats why
+          "AutoCloseable" and "Closeable" interfaces are implemented by these
+          classes.]
+
+    Syntax to call close() method of "Closeable" object
+    ====================================================
+     
+     InputStream in = null;
+
+     try {
+           in = code_which_create_the_stream;
+           ....
+      } catch(Exception ex) {
+           /*  */
+      } finally {
+          if(in!=null) {
+              try {
+                  in.close();
+               } catch(Exception ex) {
+                    /*  */
+               }
+            }//end if
+         }//end finally
+
+  OR, try-with-resource syntax:
+
+     try(InputStream in = code_which_created_the_stream) {
+          //
+     }catch(Exception ex) {
+         /* */
+     }
+
+    try-with-resource will call "close()" method when "try" block ends.
+
+
+    Multiple try-with-resources:
+
+     try(AutoCloseableClass var=create....) {
+        try(AutoCloseableClass1 var1=create....) {
+               .....
+         }
+      }catch(Exception ex) {
+
+      }
+Example: Write some bytes into a file
+
+import java.io.FileOutputStream;
+
+class Test {
+  public static void main(String []args) {
+     
+      try(FileOutputStream out=new FileOutputStream("sample.txt")) {
+           //write a byte - value between 0 to 255
+           out.write(65); 
+           out.write(66);
+           out.write(48);
+
+           //write a byte arrray
+           byte []array = "Hello World".getBytes(); // String to byte array
+           out.write(array);
+       }catch(Exception ex) {
+           System.out.println("Error while create/write : " + ex);
+       }
+   
+    }//end main
+}//end class    
+
+Example: Read the file content
+import java.io.FileInputStream;
+class Test {
+  public static void main(String []args) {
+     
+      try(FileInputStream in=new FileInputStream("sample.txt")) {
+           //read a byte 
+           System.out.println("Bytes available in the stream : " + in.available());
+           System.out.println(in.read()); //read a byte
+           System.out.println("Bytes available in the stream : " + in.available());
+           System.out.println(in.read()); //read a byte
+           System.out.println(in.read()); //read a byte
+           System.out.println("Bytes available in the stream : " + in.available());
+           
+           int b=0;
+           while( (b=in.read()) !=-1 )  {
+                System.out.print( (char)b);
+           }
+
+       }catch(Exception ex) {
+           System.out.println("Error while open/read : " + ex);
+       }
+   
+    }//end main
+}//end class    
+
+Buffered Input & Output
+========================
+  try(BufferedOutputStream out = 
+         new BufferedOutputStream(new FileOutputStream("sample.txt"))) {
+       .... as per previous example
+  }....
+
+   try(BufferedInputStream in = 
+         new BufferedInputStream(new FileInputStream("sample.txt"))) {
+       .... as per previous example
+   }....
+
+ Example: (Homework) - Copy a file content to another file
+
+
+ Example : Read a stream block wise (byte arrray).
+
+code in main:
+
+   try(BufferedInputStream in=
+    new BufferedInputStream(new FileInputStream("sample.txt"))) {
+
+           byte []block = new byte[5];  //Define the block
+
+           int b=0;
+           while( (b=in.read(block)) !=-1 )  {
+                System.out.println(b + " " + new String(block,0,b));
+           }
+
+       }catch(Exception ex) {
+           System.out.println("Error while open/read : " + ex);
+       }
+     
+ Example: Modify above sample and save result into a string 
+   ......
+   ......
+   byte []block = new byte[512]; 
+   StringBuilder sb = new StringBuilder();
+   int b=0;
+   while( (b=in.read(block)) !=-1) {
+       sb.append( new String(block,0,b) );
+    }
+    System.out.println(sb.toString()); //print file content 
+   .......
+   .......
+     
+
+
+DataOutputStream & DataInputStream 
+===================================================
+
+DataOutput & DataInput interfaces define the behavior of writing or reading 
+primitive values into or from the underlying streams. DataOuput object convert 
+primitive & string values into series of bytes and DataInput object reproduce
+primitive value from series of bytes.
+
+Example: 
+
+try(DataOutputStream ds=new DataOutputStream(new FileOutputStream("emp.txt"))) {
+  ds.writeInt(10);          // writes 4 bytes
+  ds.writeDouble(2000.30);  // writes 8 bytes
+  ds.writeShort(5000);
+}catch(Exception ex) {
+  System.out.println("Error while writing into the stream....");
+  ex.printStackTrace(); //shows detailed stack trace of exception
+}
+
+//Read values
+try(DataInputStream ds=new DataInputStream(new FileInputStream("emp.txt"))) {
+  System.out.println(ds.readInt());
+  System.out.println(ds.readDouble());
+  System.out.println(ds.readShort());
+}catch(Exception ex) {
+  System.out.println("Error while reading the stream....");
+  ex.printStackTrace(); //shows detailed stack trace of exception
+}
+
+Writing custom objects (Serialization) or reading custom objects(Deserialization)
+into or from the stream
+===================================================================================
+Java Virtual Machine permits those objects to be serialized or deserialized whose classes have implemented "Serializable" interface.
+
+The interface "Serializable" has no method (interface without method) - also called "Marker Interface" - tells the JVM that this object has permission to be serialized.
+
+We will use "ObjectOutputStream" and "ObjectInputStream" (both are implementation of DataOutput and DataInput interfaces respectively) classes to serialize custom objects.
+
+All fields of "Serializable" objects are persisted except fields created using "transient" modifier. The JVM wont serialize "transient" fields.
+
+[Note: In Android, we have same APIs along with improved class "Parcelable"]
+
+Example: We have a serializable class "Emp" with / without transient field.
+
+import java.io.*;
+
+class Emp implements Serializable {
+   private int id;
+   private transient String name; //private String name;
+
+   public Emp(int id,String name) {
+      this.id = id;
+      this.name = name;
+   }
+   public Emp() {}
+   public int getId() { return id;}
+   public void setId(int id) { this.id=id;}
+   public String getName() { return name; }
+   public void setName(String name) { this.name = name;}
+} 
+class Test {
+   public static void main(String []args) {
+
+      /* Serialize */
+      try(ObjectOutputStream 
+         ds=new ObjectOutputStream(
+              new FileOutputStream("emp.txt"))) {
+   
+         Emp emp = new Emp(10,"Rajesh");
+         ds.writeObject(emp);
+      }catch(Exception ex) {
+            System.out.println("Error while writing into the stream....");
+            ex.printStackTrace(); //shows detailed stack trace of exception
+      }   
+
+    /* DeSerialize */
+      try(ObjectInputStream 
+         ds=new ObjectInputStream(
+              new FileInputStream("emp.txt"))) {
+   
+         Emp emp = (Emp) ds.readObject();
+         System.out.println(emp.getId() + " " + emp.getName());
+      }catch(Exception ex) {
+            System.out.println("Error while reading the stream....");
+            ex.printStackTrace(); //shows detailed stack trace of exception
+      } 
+    }//end main
+}//end class
+
+XML serialization/deserialization using java.beans.XMLEncoder and java.beans.XMLDecoder classes
+===================================================================================
+Binary Serialization -- Serialization via ObjectOutputStream & ObjectInputStream is
+			known as "Binary" serialization.
+
+XML Serialization    -- There are other ways to serialize objects into XML other than
+			XMLEncoder and XMLDecoder (we will learn other ways to 			serialize object via JAXP - Java APIs for XML Processing APIs                                          in later sessions).
+
+For XML serialization, bean class must be public. In Java platform a class is called bean because it has following charactistics:
+   1. It implements Serializable
+   2. It has private fields and public setter/getter methods
+   3. It must uses "camelCase" pattern to name fields & methods
+   4. It must uses "PascalCase" name pattern to name the class.
+   5. Optionally, it has hashCode(), equals() and toString() methods
+   6. It must have public parameterless constructor.
+
+Sometimes a "bean" is also known as "POJO - Plain Object Java Object".
+
+1. Emp.java - with public access (Same code as previous example)
+2. Test.java - import java.io and java.beans package classes
+3. code in main method:
+     /* Serialize */
+      try(XMLEncoder 
+         ds=new XMLEncoder(
+              new FileOutputStream("emp.xml"))) {
+         Emp emp = new Emp(10,"Rajesh");
+         ds.writeObject(emp);
+      }catch(Exception ex) {
+            System.out.println(ex);
+      }   
+    /* DeSerialize */
+      try(XMLDecoder 
+         ds=new XMLDecoder(
+              new FileInputStream("emp.xml"))) {
+            Emp emp = (Emp) ds.readObject();
+         System.out.println(emp.getId() + " " + emp.getName());
+      }catch(Exception ex) {
+            System.out.println(ex);
+      } 
+
+
+Homework: Use java.io.FileReader, java.io.FileWriter, java.io.CharArrayWriter and
+          java.io.CharArrayReader classes
+
+Example: Convert the "InputStream" object to "Reader" and read the content line by line.
+
+     try(BufferedReader reader = 
+              new BufferedReader(
+                    new InputStreamReader(
+                         new FileInputStream("file.txt")))) {
+
+            String line = null;
+            while( (line = reader.readLine())!=null ) {
+                 System.out.println(line);
+            }
+       }catch(Exception ex) {
+            System.out.println(ex);
+       }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+ 
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

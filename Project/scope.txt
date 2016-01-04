@@ -1,0 +1,13 @@
+Scope
+======
+
+A system - "Mobile Automotive Technician" is composed of two main components: a client-side application which will run on Android handsets, and a server-side application which will support and interact with various client-side features. 
+The system is designed to facilitate the process of searching, tracking and settling shared vehicles, automotive mechanics and shops detailed data. Potential scenarios include searching locations, emergency contacts, managing requests/orders/complaints, paying charges, and encouraging people etc.
+
+The main component of the project is the software application, which will be limited to the Android operating system (specifically Android 2.2 and above). The application is not resource- or graphics-intensive, so there are no practical hardware constraints. The app will rely on several functionalities built into Android’s Application Programming Interface (API), so ensuring appropriate usage of the API will be a major concern. 
+
+Beyond that, the application is a self-contained unit and will not rely on any other Android-related software components. The application will, however, frequently interact with the JavaEE Application server, a virtual dedicated server. The server operates on a Linux/Windows platform with 2 GB of RAM and 100GB of allocated storage space. The database will be stored on the server using MySQL and will be interfaced with a wrapper written in JavaEE RESTFul application.
+
+
+
+  

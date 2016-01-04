@@ -1,0 +1,198 @@
+ Concurrency in Java - Thread
+ ===================================================================================
+ Prove - "The Java App is multi-threaded"
+
+
+ Thread means a "thread of control" - in other words, to switch attention from one  piece of code to another piece of code and so on. The JVM is here in full-of-charge.  The entire thread mechanism is controlled & managed by the JVM and it let us know  or inform via  "java.lang.Thread" and other APIs. There is no direct control 
+ on threads for the developers except we can use some of the APIs to try
+ some sort of workarounds.
+
+ "Divide attention among the methods/functions within the 'process' is called  threading - which is controller by the OS or programming Platforms".
+
+ 
+      \ | /   <--- Three threads
+        |     <---- Main thread or UI thread
+        |     
+     ---+--- OS / Platform
+        | <---------- a Process    
+       CPU
+         
+Define, Create and start threads
+=======================================================================
+ 
+//Define threads
+class One extends Thread {
+   @Override public void run() {
+      System.out.println("Hello");
+      System.out.println("Tushar");
+   }
+}
+class Two extends Thread {
+   @Override public void run() {
+      System.out.println("Hi");
+      System.out.println("Vikas");
+   }
+}
+public class Test {
+  public static void main(String []args) {
+       //Creating threads
+       One a = new One();
+       Two b = new Two();
+
+       //Define thread sub-class & create it
+       Thread c = new Thread() {
+          @Override public void run() {
+             System.out.println("How's going.");
+          }
+       };
+
+       //Starting the threads 
+       a.start();
+       b.start();
+       c.start();
+
+       new Thread() {
+           @Override public void run() {
+             System.out.println("From A");
+             System.out.println("From B");
+           }
+       }.start(); 
+  }//end main
+}//end class
+
+The JVM launch our app in a "thread" that is called "main-thread" (calling a main() method). And after that we've other threads, so , there can be one or more threads per app and hence the Java app is "multi-threaded".
+
+
+Example: Input a string and count occurence of each repeated char.
+  e.g  "abcd e reeaa acd";
+
+       a occurs 4 times
+       b occurs 1 time
+
+   
+       String str = "aaaaaaaassssssssssssaaaaaaaaaaa11111aaaaaa";
+       HashMap<Character,Integer> map = new HashMap<>();
+
+       for(int i=0;i<str.length();i++) {
+          Character ch = str.charAt(i);
+          if(map.containsKey(ch)) {
+              map.put(ch,map.get(ch)+1);
+           } else {
+           map.put(ch,1);
+           }
+       }
+
+       for(Character c:map.keySet()) {
+           System.out.println(c + " occurs " + map.get(c) + " times.");
+       } 
+
+Example: File copier 
+
+class Copy extends Thread {
+   private String sourceFile;
+   private String destinationFile;
+
+   public Copy(String sourceFile,String destinationFile) {
+      this.sourceFile = sourceFile;
+      this.destinationFile = destinationFile;
+   }
+
+   @Override
+   public void run() {
+
+      //Write code to copy a sourceFile to destinationFile using Buffered APIs
+      ......
+      ......
+      System.out.println(sourceFile + " copied successfully...");
+    }
+}
+and code in main method:
+
+     new Copy("d:/javaprg/1.zip","d:/test/1.zip").start();
+     new Copy("d:/javaprg/2.zip","d:/test/2.zip").start();
+     new Copy("d:/javaprg/3.zip","d:/test/3.zip").start();
+
+
+Why we have to use threads? (Why people uses threads)
+
+Ans : To make our apps more responsive and handle number of background tasks including downloading, printing, processing databases etc smoothly. Animation or graphics processing is also a great cause to use "threads".
+
+What will happen when we want to define a thread but our class is already a sub-class of other class?
+==================================================================================
+For example,
+
+I want to define a thread class to "Emp" class but it already extended the "Person" class.
+
+class Person {}
+class Emp extends Person {} so I cannot extends "Thread" any more.
+
+Ans : We need to use java.lang.Runnable interface and passing the "Runnable" object to thread.
+
+Steps
+------
+1. Create runnable
+class Emp extends Person implements Runnable {
+  ....
+  //override the run() method
+  @Override
+  public void run() {
+     //your async tasks
+  }
+}
+2. Create Runnable object (Emp class is called Runnable)
+   Emp emp = new Emp();
+3. Create a thread which takes "runnable object" reference.
+   Thread th = new Thread(emp);
+4. Invoke "start()" which will executes the run() of "Runnable"
+   th.start();
+
+Quick ways to create threads -- anonymous objects
+=====================================================
+
+  code in main:
+
+   Runnable r1 = new Runnable() {
+      @Override
+      public void run() {
+          //your async actions
+      }
+   };
+   Thread th = new Thread(r1);
+   th.start();
+
+OR
+
+   new Thread(new Runnable(){
+      @Override
+      public void run() {
+          //your async actions
+      }
+   }).start();
+
+OR
+
+  new Thread() {
+      @Override
+      public void run() {
+          //your async actions
+      }   
+  }.start();
+
+
+
+Functional programming approach - Define thread behavior methods to copy/download local or remote resources.
+
+for example,
+
+public static void copy(String src,String dest) {
+ new Thread() {
+      @Override
+      public void run() {
+          //code to copy a file
+      }   
+  }.start();
+}
+
+
+
+
